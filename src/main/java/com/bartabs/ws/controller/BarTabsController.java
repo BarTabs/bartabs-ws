@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.bartabs.ws.dao.TestDao;
+import com.bartabs.ws.dataaccess.TestDao;
 import com.bartabs.ws.model.Shop;
 
 @Controller

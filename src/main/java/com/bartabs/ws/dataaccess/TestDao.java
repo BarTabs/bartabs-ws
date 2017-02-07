@@ -1,4 +1,4 @@
-package com.bartabs.ws.dao;
+package com.bartabs.ws.dataaccess;
 
 import com.bartabs.ws.model.Shop;
 

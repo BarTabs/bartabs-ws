@@ -1,4 +1,4 @@
-package com.bartabs.ws.dao.jdbc;
+package com.bartabs.ws.dataaccess.jdbc;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -9,7 +9,7 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import com.bartabs.ws.dao.TestDao;
+import com.bartabs.ws.dataaccess.TestDao;
 import com.bartabs.ws.model.Shop;
 
 @Repository
