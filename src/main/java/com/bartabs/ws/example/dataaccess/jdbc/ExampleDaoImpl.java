@@ -1,4 +1,4 @@
-package com.bartabs.ws.dataaccess.jdbc;
+package com.bartabs.ws.example.dataaccess.jdbc;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -9,26 +9,26 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import com.bartabs.ws.dataaccess.TestDao;
-import com.bartabs.ws.model.Shop;
+import com.bartabs.ws.example.dataaccess.ExampleDao;
+import com.bartabs.ws.example.model.Example;
 
 @Repository
-public class TestDaoImpl implements TestDao {
+public class ExampleDaoImpl implements ExampleDao {
 
 	@Autowired
 	NamedParameterJdbcTemplate template;
 
 	@Override
-	public Shop getData() {
+	public Example getData() {
 		final String sql = "SELECT name FROM bartabs.test where objectid = :objectId";
 
 		final MapSqlParameterSource params = new MapSqlParameterSource();
 		params.addValue("objectId", "1");
-		return template.queryForObject(sql, params, new RowMapper<Shop>() {
+		return template.queryForObject(sql, params, new RowMapper<Example>() {
 
 			@Override
-			public Shop mapRow(ResultSet rs, int arg1) throws SQLException {
-				final Shop shop = new Shop();
+			public Example mapRow(ResultSet rs, int arg1) throws SQLException {
+				final Example shop = new Example();
 				shop.setName(rs.getString("name"));
 
 				return shop;
