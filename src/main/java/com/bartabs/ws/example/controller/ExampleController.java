@@ -15,12 +15,12 @@ public class ExampleController {
 	@Autowired
 	ExampleDao dao;
 
-	@RequestMapping(value = "/test", method = RequestMethod.GET)
+	@RequestMapping(value = "/test", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody Example getShopInJSON(@RequestParam(value = "name", required = false) String name) {
 		return dao.getData();
 	}
 
-	@RequestMapping(value = "/test", method = RequestMethod.POST)
+	@RequestMapping(value = "/test", method = RequestMethod.POST, produces = "application/json")
 	public @ResponseBody String examplePost(@RequestParam(value = "x", required = false) Integer x,
 			@RequestParam(value = "y", required = false) Integer y) {
 		String result = "Invalid format";
