@@ -28,7 +28,7 @@ public class ExampleController {
 		if (x != null && y != null)
 			result = "" + (x + y);
 
-		return "<p>" + result + "</p>";
+		return result;
 	}
 
 }
