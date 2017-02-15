@@ -24,6 +24,7 @@ public class ExampleDaoImpl implements ExampleDao {
 
 		final MapSqlParameterSource params = new MapSqlParameterSource();
 		params.addValue("objectId", "1");
+
 		return template.queryForObject(sql, params, new RowMapper<Example>() {
 
 			@Override
