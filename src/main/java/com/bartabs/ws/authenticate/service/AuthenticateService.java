@@ -10,13 +10,14 @@ import com.bartabs.ws.exceptions.UserNotFoundException;
 import com.bartabs.ws.user.model.User;
 import com.bartabs.ws.user.service.UserService;
 
-@Service("User.UserService")
+@Service("Authenticate.AuthenticateService")
 public class AuthenticateService
 {
 
 	@Qualifier("Authenicate.AuthenticateDao")
 	@Autowired
 	private AuthenticateDao authenticateDao;
+
 	@Qualifier("User.UserService")
 	@Autowired
 	private UserService userService;

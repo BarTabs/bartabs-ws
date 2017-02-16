@@ -7,10 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.stereotype.Repository;
 
 import com.bartabs.ws.location.dataaccess.LocationDao;
 import com.bartabs.ws.location.model.Location;
 
+@Repository("Location.LocationDao")
 public class LocationDaoImpl implements LocationDao
 {
 	@Autowired
