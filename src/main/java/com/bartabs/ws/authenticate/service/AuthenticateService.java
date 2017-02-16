@@ -14,7 +14,7 @@ import com.bartabs.ws.user.service.UserService;
 public class AuthenticateService
 {
 
-	@Qualifier("Authenicate.AuthenticateDao")
+	@Qualifier("Authenticate.AuthenticateDao")
 	@Autowired
 	private AuthenticateDao authenticateDao;
 
