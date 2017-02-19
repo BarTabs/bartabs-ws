@@ -87,7 +87,7 @@ public class UserDaoImpl implements UserDao
 			+ "SELECT u.objectid, u.first_name, u.last_name, u.middle_initial, u.phone_number, u.location_id, "
 			+ "		u.user_type, u.username, u.password, l.objectid AS location_id, l.address1, l.address2, "
 			+ "		l.city, l.state, l.zip_code, l.geo_area_id "
-			+ "FROM bartabs.user u"
+			+ "FROM bartabs.user u "
 			+ "LEFT JOIN bartabs.location l ON l.objectid = u.location_id "
 			+ "WHERE username = :username";
 		// @formatter:on
