@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import com.bartabs.ws.exceptions.UserNotFoundException;
 import com.bartabs.ws.location.model.Location;
 import com.bartabs.ws.location.service.LocationService;
 import com.bartabs.ws.user.dataaccess.UserDao;
@@ -21,14 +22,14 @@ public class UserService
 	@Autowired
 	private LocationService locationService;
 
-	public User getUserByID(final Long userID)
+	public User getUserByID(final Long userID) throws UserNotFoundException
 	{
 		User user = dao.getUserByID(userID);
 
 		return user;
 	}
 
-	public User getUserByUserName(final String userName)
+	public User getUserByUserName(final String userName) throws UserNotFoundException
 	{
 		User user = dao.getUserByUserName(userName);
 
@@ -49,7 +50,7 @@ public class UserService
 		return userID;
 	}
 
-	public User updateUser(final User user)
+	public User updateUser(final User user) throws UserNotFoundException
 	{
 		Location location = user.getLocation();
 

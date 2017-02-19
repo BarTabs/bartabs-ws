@@ -1,12 +1,14 @@
 package com.bartabs.ws.user.dataaccess;
 
+import com.bartabs.ws.exceptions.UserNotFoundException;
 import com.bartabs.ws.user.model.User;
 
-public interface UserDao {
+public interface UserDao
+{
 
-	public User getUserByID(Long objectID);
+	public User getUserByID(Long objectID) throws UserNotFoundException;
 
-	public User getUserByUserName(String userName);
+	public User getUserByUserName(String userName) throws UserNotFoundException;
 
 	public Long createUser(User user);
 

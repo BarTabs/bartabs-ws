@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.bartabs.ws.Response;
 import com.bartabs.ws.authenticate.service.AuthenticateService;
 import com.bartabs.ws.exceptions.UserNotFoundException;
 import com.bartabs.ws.user.model.User;
@@ -45,19 +46,51 @@ public class UserController
 	}
 
 	@RequestMapping(value = "/user/createuser", method = RequestMethod.POST, produces = "application/json")
-	public @ResponseBody User createUser(final User user)
+	public @ResponseBody Response createUser(final User user)
 	{
-		Long userID = service.createUser(user);
+		try {
+			Long userID = service.createUser(user);
+			final User newUser = service.getUserByID(userID);
 
-		return service.getUserByID(userID);
+			Response response = new Response();
+			response.setStatus(200);
+			response.setData(newUser);
+
+			return response;
+		} catch (UserNotFoundException ex) {
+			Response response = new Response();
+			response.setStatus(500);
+			response.setMessage(ex.getMessage());
+
+			return response;
+		} catch (Exception ex) {
+			Response response = new Response();
+			response.setStatus(500);
+			response.setMessage("Error processing user creation");
+
+			return response;
+		}
 	}
 
 	@RequestMapping(value = "/user/updateuser", method = RequestMethod.POST, produces = "application/json")
-	public @ResponseBody User updateUser(final User user)
+	public @ResponseBody Response updateUser(final User user)
 	{
-		User updatedUser = service.updateUser(user);
+		try {
+			User updatedUser;
+			updatedUser = service.updateUser(user);
 
-		return updatedUser;
+			Response response = new Response();
+			response.setStatus(200);
+			response.setData(updatedUser);
+
+			return response;
+		} catch (UserNotFoundException e) {
+			Response response = new Response();
+			response.setMessage(e.getMessage());
+
+			return response;
+		}
+
 	}
 
 	@RequestMapping(value = "/user/deleteuser", method = RequestMethod.POST, produces = "application/json")

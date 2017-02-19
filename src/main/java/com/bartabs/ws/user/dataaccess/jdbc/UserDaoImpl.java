@@ -10,6 +10,7 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.bartabs.ws.exceptions.UserNotFoundException;
 import com.bartabs.ws.location.model.Location;
 import com.bartabs.ws.user.dataaccess.UserDao;
 import com.bartabs.ws.user.model.User;
@@ -22,7 +23,7 @@ public class UserDaoImpl implements UserDao
 	NamedParameterJdbcTemplate template;
 
 	@Override
-	public User getUserByID(final Long objectID)
+	public User getUserByID(final Long objectID) throws UserNotFoundException
 	{
 		try {
 			// @formatter:off
@@ -75,13 +76,14 @@ public class UserDaoImpl implements UserDao
 
 			});
 		} catch (EmptyResultDataAccessException ex) {
-			return null;
+			throw new UserNotFoundException();
 		}
 	}
 
 	@Override
-	public User getUserByUserName(final String username)
+	public User getUserByUserName(final String username) throws UserNotFoundException
 	{
+		try {
 		// @formatter:off
 		String sql = ""
 			+ "SELECT u.objectid, u.first_name, u.last_name, u.middle_initial, u.phone_number, u.location_id, "
@@ -92,45 +94,48 @@ public class UserDaoImpl implements UserDao
 			+ "WHERE username = :username";
 		// @formatter:on
 
-		return template.queryForObject(sql, new MapSqlParameterSource("username", username), new RowMapper<User>()
-		{
-
-			@Override
-			public User mapRow(ResultSet rs, int arg1) throws SQLException
+			return template.queryForObject(sql, new MapSqlParameterSource("username", username), new RowMapper<User>()
 			{
-				User user = new User();
-				user.setObjectID(rs.getLong("objectid"));
-				user.setFirstName(rs.getString("first_name"));
-				user.setLastName(rs.getString("last_name"));
-				user.setMiddleInitial(rs.getString("middle_initial"));
-				user.setPhoneNumber(rs.getString("phone_number"));
 
-				Integer userType = rs.getInt("user_type");
+				@Override
+				public User mapRow(ResultSet rs, int arg1) throws SQLException
+				{
+					User user = new User();
+					user.setObjectID(rs.getLong("objectid"));
+					user.setFirstName(rs.getString("first_name"));
+					user.setLastName(rs.getString("last_name"));
+					user.setMiddleInitial(rs.getString("middle_initial"));
+					user.setPhoneNumber(rs.getString("phone_number"));
 
-				if (!rs.wasNull()) {
-					user.setUserType(UserType.values()[userType]);
-				} else {
-					user.setUserType(UserType.CUSTOMER);
+					Integer userType = rs.getInt("user_type");
+
+					if (!rs.wasNull()) {
+						user.setUserType(UserType.values()[userType]);
+					} else {
+						user.setUserType(UserType.CUSTOMER);
+					}
+
+					user.setUsername(rs.getString("username"));
+					user.setPassword(rs.getString("password"));
+
+					Location location = new Location();
+					location.setObjectID(rs.getLong("location_id"));
+					location.setAddress1(rs.getString("address1"));
+					location.setAddress2(rs.getString("address2"));
+					location.setCity(rs.getString("city"));
+					location.setState(rs.getString("state"));
+					location.setZipCode(rs.getInt("zip_code"));
+					location.setGeoAreaID(rs.getLong("geo_area_id"));
+
+					user.setLocation(location);
+
+					return user;
 				}
 
-				user.setUsername(rs.getString("username"));
-				user.setPassword(rs.getString("password"));
-
-				Location location = new Location();
-				location.setObjectID(rs.getLong("location_id"));
-				location.setAddress1(rs.getString("address1"));
-				location.setAddress2(rs.getString("address2"));
-				location.setCity(rs.getString("city"));
-				location.setState(rs.getString("state"));
-				location.setZipCode(rs.getInt("zip_code"));
-				location.setGeoAreaID(rs.getLong("geo_area_id"));
-
-				user.setLocation(location);
-
-				return user;
-			}
-
-		});
+			});
+		} catch (EmptyResultDataAccessException ex) {
+			throw new UserNotFoundException();
+		}
 	}
 
 	@Override

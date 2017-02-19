@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.bartabs.ws.authenticate.dataaccess.AuthenticateDao;
+import com.bartabs.ws.exceptions.UserNotFoundException;
 import com.bartabs.ws.user.dataaccess.UserDao;
 import com.bartabs.ws.user.model.User;
 
@@ -27,7 +28,7 @@ public class AuthenticateDaoImpl implements AuthenticateDao
 		return null;
 	}
 
-	public User getUserByToken(String token)
+	public User getUserByToken(String token) throws UserNotFoundException
 	{
 		try {
 			// @formatter:off
