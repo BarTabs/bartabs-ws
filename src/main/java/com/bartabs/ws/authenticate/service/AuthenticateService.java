@@ -22,17 +22,15 @@ public class AuthenticateService
 	@Autowired
 	private UserService userService;
 
-	public String authenticate(final String inputUsername, String inputPassword)
+	public boolean authenticate(final String inputUsername, String inputPassword)
 			throws UserNotFoundException, InvalidPasswordException
 	{
-		String token = null;
 		User user = userService.getUserByUserName(inputUsername);
 		if (user != null) {
 			String password = user.getPassword();
 
 			if (password.equals(inputPassword)) {
-				Long userID = user.getObjectID();
-				token = authenticateDao.generateToken(userID);
+				return true;
 			} else {
 				throw new InvalidPasswordException();
 			}
@@ -40,8 +38,6 @@ public class AuthenticateService
 		} else {
 			throw new UserNotFoundException();
 		}
-
-		return token;
 	}
 
 	public User getUserByToken(final String token) throws UserNotFoundException

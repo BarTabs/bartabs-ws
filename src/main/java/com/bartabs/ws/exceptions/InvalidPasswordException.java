@@ -1,8 +1,10 @@
 package com.bartabs.ws.exceptions;
 
-public class InvalidPasswordException extends Exception {
+public class InvalidPasswordException extends Exception
+{
 
-	public InvalidPasswordException() {
+	public InvalidPasswordException()
+	{
 		super("Invalid password entered");
 	}
 }
