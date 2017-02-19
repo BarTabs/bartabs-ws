@@ -11,11 +11,12 @@ import com.bartabs.ws.Response;
 import com.bartabs.ws.authenticate.model.AuthenticateParameters;
 import com.bartabs.ws.authenticate.service.AuthenticateService;
 import com.bartabs.ws.authenticate.service.TokenService;
+import com.bartabs.ws.exceptions.InvalidPasswordException;
+import com.bartabs.ws.exceptions.UserNotFoundException;
 
 @Controller("Authenticate.AuthenticateController")
 public class AuthenticateController
 {
-	private static final String AUTHENTICATION_ERROR_MESSAGE = "Invalid authentication attempt.";
 
 	@Autowired
 	@Qualifier("Authenticate.AuthenticateService")
@@ -29,19 +30,32 @@ public class AuthenticateController
 	public @ResponseBody Response authenticate(final AuthenticateParameters authenticationParams) throws Exception
 	{
 
-		final String username = authenticationParams.getUsername();
-		final String password = authenticationParams.getPassword();
+		try {
+			final String username = authenticationParams.getUsername();
+			final String password = authenticationParams.getPassword();
 
-		final Response response = new Response();
-		if (authenticateService.authenticate(username, password)) {
-			// final String token = tokenService.encodeToken(username);
-			final String token = "test";
-			response.setData(token);
-		} else {
+			final Response response = new Response();
+			if (authenticateService.authenticate(username, password)) {
+				// final String token = tokenService.encodeToken(username);
+				final String token = "test";
+				response.setData(token);
+			}
+
+			return response;
+
+		} catch (UserNotFoundException ex) {
+			final Response response = new Response();
 			response.setStatus(401);
-			response.setMessage(AUTHENTICATION_ERROR_MESSAGE);
-		}
+			response.setMessage(ex.getMessage());
 
-		return response;
+			return response;
+
+		} catch (InvalidPasswordException ex) {
+			final Response response = new Response();
+			response.setStatus(401);
+			response.setMessage(ex.getMessage());
+
+			return response;
+		}
 	}
 }
