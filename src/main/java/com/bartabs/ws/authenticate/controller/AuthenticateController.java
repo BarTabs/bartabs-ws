@@ -37,7 +37,6 @@ public class AuthenticateController
 			final Response response = new Response();
 			if (authenticateService.authenticate(username, password)) {
 				final String token = tokenService.encodeToken(username);
-				// final String token = "test";
 				response.setData(token);
 			}
 

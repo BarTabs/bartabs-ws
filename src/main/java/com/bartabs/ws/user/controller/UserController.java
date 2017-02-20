@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.bartabs.ws.Response;
 import com.bartabs.ws.authenticate.service.AuthenticateService;
+import com.bartabs.ws.authenticate.service.TokenService;
 import com.bartabs.ws.exceptions.UserNotFoundException;
 import com.bartabs.ws.user.model.User;
 import com.bartabs.ws.user.service.UserService;
@@ -22,13 +23,17 @@ public class UserController
 
 	private final Log log = LogFactory.getLog(this.getClass());
 
-	@Qualifier("User.UserService")
 	@Autowired
+	@Qualifier("User.UserService")
 	private UserService service;
 
-	@Qualifier("Authenticate.AuthenticateService")
 	@Autowired
+	@Qualifier("Authenticate.AuthenticateService")
 	private AuthenticateService authenticateService;
+
+	@Autowired
+	@Qualifier("Authenticate.TokenService")
+	private TokenService tokenService;
 
 	@RequestMapping(value = "/user/getuser", method = RequestMethod.POST, produces = "application/json")
 	public @ResponseBody User authenticate(@RequestParam("token") final String token)
@@ -53,10 +58,11 @@ public class UserController
 		try {
 			Long userID = service.createUser(user);
 			final User newUser = service.getUserByID(userID);
+			final String token = tokenService.encodeToken(newUser.getUsername());
 
 			Response response = new Response();
 			response.setStatus(200);
-			response.setData(newUser);
+			response.setData(token);
 
 			return response;
 		} catch (UserNotFoundException ex) {
