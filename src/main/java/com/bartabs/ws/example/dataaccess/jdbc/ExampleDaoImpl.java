@@ -35,7 +35,7 @@ public class ExampleDaoImpl implements ExampleDao
 			{
 				final Example shop = new Example();
 				shop.setName(rs.getString("name"));
-				shop.setStaffName("BarTabs");
+				// shop.setStaffName("BarTabs");
 
 				return shop;
 			}
