@@ -58,8 +58,7 @@ public class LocationDaoImpl implements LocationDao
 			+ "INSERT INTO bartabs.location "
 			+ "    (address1, address2, city, state, zip_code, geo_area_id) "
 			+ "VALUES "
-			+ "    (:address1, :address2, :city, :state, :zipCode, :geoAreaID) "
-			+ "RETURNING objectid";
+			+ "    (:address1, :address2, :city, :state, :zipCode, :geoAreaID) ";
 		// @formatter:on
 
 		MapSqlParameterSource params = new MapSqlParameterSource();
@@ -70,7 +69,11 @@ public class LocationDaoImpl implements LocationDao
 		params.addValue("zipCode", location.getZipCode());
 		params.addValue("geoAreaID", location.getGeoAreaID());
 
-		return template.queryForObject(sql, params, Long.class);
+		template.queryForObject(sql, params, Long.class);
+
+		final String getIDQuery = "SELECT MAX(objectid) FROM bartabs.location ";
+
+		return template.queryForObject(getIDQuery, new MapSqlParameterSource(), Long.class);
 
 	}
 

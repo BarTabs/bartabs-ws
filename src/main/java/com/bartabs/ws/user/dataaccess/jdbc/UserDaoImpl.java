@@ -31,9 +31,9 @@ public class UserDaoImpl implements UserDao
 				+ "SELECT u.objectid, u.first_name, u.last_name, u.middle_initial, u.phone_number, u.location_id, "
 				+ "		u.user_type, u.username, u.password, l.objectid AS location_id, l.address1, l.address2, "
 				+ "		l.city, l.state, l.zip_code, l.geo_area_id "
-				+ "FROM bartabs.user u"
+				+ "FROM bartabs.user u "
 				+ "LEFT JOIN bartabs.location l ON l.objectid = u.location_id "
-				+ "WHERE objectid = :objectID ";
+				+ "WHERE u.objectid = :objectID ";
 			// @formatter:on
 
 			return template.queryForObject(sql, new MapSqlParameterSource("objectID", objectID), new RowMapper<User>()
@@ -142,13 +142,13 @@ public class UserDaoImpl implements UserDao
 	public Long createUser(final User user)
 	{
 		// @formatter:off
-		String sql = "" + "INSERT INTO bartabs.user "
+		String sql = "" 
+			+ "INSERT INTO bartabs.user "
 			+ "    (first_name, last_name, middle_initial, phone_number, location_id, user_type, "
 			+ "     username, password, created_timestamp, modified_timestamp) " 
 			+ "VALUES "
 			+ "    (:firstName, :lastName, :middleInitial, :phoneNumber, :locationID, :userType, "
-			+ "     :username, :password, now(), now()) " 
-			+ "RETURNING objectid";
+			+ "     :username, :password, now(), now()) ";
 		// @formatter:on
 
 		MapSqlParameterSource params = new MapSqlParameterSource();
@@ -162,7 +162,11 @@ public class UserDaoImpl implements UserDao
 		params.addValue("username", user.getUsername());
 		params.addValue("password", user.getPassword());
 
-		return template.queryForObject(sql, params, Long.class);
+		template.update(sql, params);
+
+		final String getIDQuery = "SELECT MAX(objectid) FROM bartabs.user ";
+
+		return template.queryForObject(getIDQuery, new MapSqlParameterSource(), Long.class);
 	}
 
 	@Override

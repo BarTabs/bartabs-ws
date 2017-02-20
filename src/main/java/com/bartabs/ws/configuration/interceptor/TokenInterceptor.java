@@ -10,6 +10,9 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import com.bartabs.ws.authenticate.service.TokenService;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
+
 @Component("Interceptor.TokenInterceptor")
 public class TokenInterceptor extends HandlerInterceptorAdapter
 {
@@ -28,9 +31,8 @@ public class TokenInterceptor extends HandlerInterceptorAdapter
 		}
 
 		try {
-			// Jws<Claims> claims = tokenService.decodeToken(token);
-			// if (claims != null) {
-			if (token.equals("test")) {
+			Jws<Claims> claims = tokenService.decodeToken(token);
+			if (claims != null) {
 				return true;
 			}
 
