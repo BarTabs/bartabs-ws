@@ -15,7 +15,7 @@ public class User
 	private String middleInitial;
 	private String formattedName;
 	private String phoneNumber;
-	private UserType userType;
+	private Integer userType;
 	private String username;
 	private String password;
 	private Date createdTimestamp;
@@ -83,18 +83,14 @@ public class User
 		this.phoneNumber = phoneNumber;
 	}
 
-	public UserType getUserType()
+	public Integer getUserType()
 	{
 		return userType;
 	}
 
 	public void setUserType(Integer userType)
 	{
-		if (userType != null) {
-			this.userType = UserType.values()[userType];
-		} else {
-			this.userType = UserType.CUSTOMER;
-		}
+		this.userType = userType;
 	}
 
 	public String getUsername()
