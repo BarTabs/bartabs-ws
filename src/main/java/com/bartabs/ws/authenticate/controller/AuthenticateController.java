@@ -15,7 +15,7 @@ import com.bartabs.ws.exceptions.InvalidPasswordException;
 import com.bartabs.ws.exceptions.UserNotFoundException;
 
 @Controller("Authenticate.AuthenticateController")
-public class AuthenticateController
+public class AuthenticateController extends Response
 {
 
 	@Autowired
@@ -34,27 +34,21 @@ public class AuthenticateController
 			final String username = authenticationParams.getUsername();
 			final String password = authenticationParams.getPassword();
 
-			final Response response = new Response();
+			String token = null;
+
 			if (authenticateService.authenticate(username, password)) {
-				final String token = tokenService.encodeToken(username);
-				response.setData(token);
+				token = tokenService.encodeToken(username);
 			}
 
-			return response;
+			return buildResponse(token);
 
 		} catch (UserNotFoundException ex) {
-			final Response response = new Response();
-			response.setStatus(401);
-			response.setMessage(ex.getMessage());
 
-			return response;
+			return buildErrorResponse(ex.getMessage());
 
 		} catch (InvalidPasswordException ex) {
-			final Response response = new Response();
-			response.setStatus(401);
-			response.setMessage(ex.getMessage());
 
-			return response;
+			return buildErrorResponse(ex.getMessage());
 		}
 	}
 }

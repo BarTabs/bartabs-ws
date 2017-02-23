@@ -88,9 +88,13 @@ public class User
 		return userType;
 	}
 
-	public void setUserType(UserType userType)
+	public void setUserType(Integer userType)
 	{
-		this.userType = userType;
+		if (userType != null) {
+			this.userType = UserType.values()[userType];
+		} else {
+			this.userType = UserType.CUSTOMER;
+		}
 	}
 
 	public String getUsername()

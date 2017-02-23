@@ -14,7 +14,6 @@ import com.bartabs.ws.exceptions.UserNotFoundException;
 import com.bartabs.ws.location.model.Location;
 import com.bartabs.ws.user.dataaccess.UserDao;
 import com.bartabs.ws.user.model.User;
-import com.bartabs.ws.user.model.UserType;
 
 @Repository("User.UserDao")
 public class UserDaoImpl implements UserDao
@@ -52,9 +51,9 @@ public class UserDaoImpl implements UserDao
 					Integer userType = rs.getInt("user_type");
 
 					if (!rs.wasNull()) {
-						user.setUserType(UserType.values()[userType]);
+						user.setUserType(userType);
 					} else {
-						user.setUserType(UserType.CUSTOMER);
+						user.setUserType(userType);
 					}
 
 					user.setUsername(rs.getString("username"));
@@ -110,9 +109,9 @@ public class UserDaoImpl implements UserDao
 					Integer userType = rs.getInt("user_type");
 
 					if (!rs.wasNull()) {
-						user.setUserType(UserType.values()[userType]);
+						user.setUserType(userType);
 					} else {
-						user.setUserType(UserType.CUSTOMER);
+						user.setUserType(userType);
 					}
 
 					user.setUsername(rs.getString("username"));

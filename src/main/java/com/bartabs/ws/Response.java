@@ -6,6 +6,44 @@ public class Response
 	private String message;
 	private Object data;
 
+	public Response buildResponse(final Object data, final String message)
+	{
+		Response response = new Response();
+		response.setStatus(0);
+		response.setMessage(message);
+		response.setData(data);
+
+		return response;
+	}
+
+	public Response buildResponse(final Object data)
+	{
+		Response response = new Response();
+		response.setStatus(0);
+		response.setMessage("Ok");
+		response.setData(data);
+
+		return response;
+	}
+
+	public Response buildResponse(final String message)
+	{
+		Response response = new Response();
+		response.setStatus(0);
+		response.setMessage(message);
+
+		return response;
+	}
+
+	public Response buildErrorResponse(final String message)
+	{
+		Response response = new Response();
+		response.setStatus(-1);
+		response.setMessage(message);
+
+		return response;
+	}
+
 	public int getStatus()
 	{
 		return status;

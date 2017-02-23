@@ -7,28 +7,31 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.bartabs.ws.Response;
 import com.bartabs.ws.example.dataaccess.ExampleDao;
-import com.bartabs.ws.example.model.Example;
 
 @Controller
-public class ExampleController {
+public class ExampleController extends Response
+{
 	@Autowired
 	ExampleDao dao;
 
 	@RequestMapping(value = "/test", method = RequestMethod.GET, produces = "application/json")
-	public @ResponseBody Example getShopInJSON(@RequestParam(value = "name", required = false) String name) {
-		return dao.getData();
+	public @ResponseBody Response getShopInJSON(@RequestParam(value = "name", required = false) String name)
+	{
+		return buildResponse(dao.getData());
 	}
 
 	@RequestMapping(value = "/test", method = RequestMethod.POST, produces = "application/json")
-	public @ResponseBody String examplePost(@RequestParam(value = "x", required = false) Integer x,
-			@RequestParam(value = "y", required = false) Integer y) {
+	public @ResponseBody Response examplePost(@RequestParam(value = "x", required = false) Integer x,
+			@RequestParam(value = "y", required = false) Integer y)
+	{
 		String result = "Invalid format";
 
 		if (x != null && y != null)
 			result = "" + (x + y);
 
-		return result;
+		return buildResponse(result);
 	}
 
 }

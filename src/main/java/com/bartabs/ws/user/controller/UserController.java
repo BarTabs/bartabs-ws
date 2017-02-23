@@ -18,7 +18,7 @@ import com.bartabs.ws.user.model.User;
 import com.bartabs.ws.user.service.UserService;
 
 @Controller("User.UserController")
-public class UserController
+public class UserController extends Response
 {
 
 	private final Log log = LogFactory.getLog(this.getClass());
@@ -60,23 +60,11 @@ public class UserController
 			final User newUser = service.getUserByID(userID);
 			final String token = tokenService.encodeToken(newUser.getUsername());
 
-			Response response = new Response();
-			response.setStatus(200);
-			response.setData(token);
-
-			return response;
+			return buildResponse(token);
 		} catch (UserNotFoundException ex) {
-			Response response = new Response();
-			response.setStatus(500);
-			response.setMessage(ex.getMessage());
-
-			return response;
+			return buildErrorResponse(ex.getMessage());
 		} catch (Exception ex) {
-			Response response = new Response();
-			response.setStatus(500);
-			response.setMessage("Error processing user creation");
-
-			return response;
+			return buildErrorResponse("Error processing user creation");
 		}
 	}
 
@@ -87,25 +75,19 @@ public class UserController
 			User updatedUser;
 			updatedUser = service.updateUser(user);
 
-			Response response = new Response();
-			response.setStatus(200);
-			response.setData(updatedUser);
-
-			return response;
+			return buildResponse(updatedUser);
 		} catch (UserNotFoundException e) {
-			Response response = new Response();
-			response.setMessage(e.getMessage());
 
-			return response;
+			return buildErrorResponse(e.getMessage());
 		}
 
 	}
 
 	@RequestMapping(value = "/user/deleteuser", method = RequestMethod.POST, produces = "application/json")
-	public @ResponseBody User deleteUser(final User user)
+	public @ResponseBody Response deleteUser(final User user)
 	{
 		service.removeUser(user);
 
-		return null;
+		return buildResponse("Ok");
 	}
 }
