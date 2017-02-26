@@ -2,6 +2,7 @@ package com.bartabs.ws.example.dataaccess.jdbc;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
@@ -20,14 +21,14 @@ public class ExampleDaoImpl implements ExampleDao
 	NamedParameterJdbcTemplate template;
 
 	@Override
-	public Example getData()
+	public List<Example> getData()
 	{
 		final String sql = "SELECT name FROM bartabs.test where objectid = :objectId";
 
 		final MapSqlParameterSource params = new MapSqlParameterSource();
 		params.addValue("objectId", "1");
 
-		return template.queryForObject(sql, params, new RowMapper<Example>()
+		return template.query(sql, params, new RowMapper<Example>()
 		{
 
 			@Override
