@@ -36,18 +36,19 @@ public class UserController extends Response
 	private TokenService tokenService;
 
 	@RequestMapping(value = "/user/getuser", method = RequestMethod.POST, produces = "application/json")
-	public @ResponseBody User authenticate(@RequestParam("token") final String token)
+	public @ResponseBody Response authenticate(@RequestParam("token") final String token)
 	{
 
 		try {
 			log.debug("Getting user: " + token);
 
-			return authenticateService.getUserByToken(token);
+			User user = authenticateService.getUserByToken(token);
+			return buildResponse(user);
 
 		} catch (UserNotFoundException ex) {
 			log.error(ex.toString(), ex);
 
-			return null;
+			return buildErrorResponse(ex.getMessage());
 		}
 
 	}
