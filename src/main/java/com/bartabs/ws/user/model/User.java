@@ -18,6 +18,7 @@ public class User
 	private Integer userType;
 	private String username;
 	private String password;
+	private byte[] salt;
 	private Date createdTimestamp;
 	private Date modifiedTimestamp;
 
@@ -111,6 +112,16 @@ public class User
 	public void setPassword(String password)
 	{
 		this.password = password;
+	}
+
+	public byte[] getSalt()
+	{
+		return salt;
+	}
+
+	public void setSalt(byte[] salt)
+	{
+		this.salt = salt;
 	}
 
 	public Date getCreatedTimestamp()

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import com.bartabs.ws.exceptions.DuplicateUserNameException;
 import com.bartabs.ws.exceptions.UserNotFoundException;
 import com.bartabs.ws.location.model.Location;
 import com.bartabs.ws.location.service.LocationService;
@@ -39,7 +40,8 @@ public class UserService
 		return user;
 	}
 
-	public Long createUser(final User user) throws NoSuchAlgorithmException, InvalidKeySpecException
+	public Long createUser(final User user)
+			throws NoSuchAlgorithmException, InvalidKeySpecException, DuplicateUserNameException
 	{
 		Location location = user.getLocation();
 

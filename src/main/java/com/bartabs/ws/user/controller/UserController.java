@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.bartabs.ws.Response;
 import com.bartabs.ws.authenticate.service.AuthenticateService;
 import com.bartabs.ws.authenticate.service.TokenService;
+import com.bartabs.ws.exceptions.DuplicateUserNameException;
 import com.bartabs.ws.exceptions.UserNotFoundException;
 import com.bartabs.ws.user.model.User;
 import com.bartabs.ws.user.service.UserService;
@@ -62,6 +63,8 @@ public class UserController extends Response
 			final String token = tokenService.encodeToken(newUser.getUsername());
 
 			return buildResponse(token);
+		} catch (DuplicateUserNameException ex) {
+			return buildErrorResponse(ex.getMessage());
 		} catch (UserNotFoundException ex) {
 			return buildErrorResponse(ex.getMessage());
 		} catch (Exception ex) {

@@ -10,12 +10,15 @@ import javax.crypto.spec.PBEKeySpec;
 
 public class PasswordHasher
 {
-	public static String generateStrongPasswordHash(String password)
+	public static String generateStrongPasswordHash(String password, byte[] salt)
 			throws NoSuchAlgorithmException, InvalidKeySpecException
 	{
 		int iterations = 1000;
 		char[] chars = password.toCharArray();
-		byte[] salt = getSalt();
+
+		if (salt == null) {
+			salt = getSalt();
+		}
 
 		PBEKeySpec spec = new PBEKeySpec(chars, salt, iterations, 64 * 8);
 		SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
@@ -23,7 +26,7 @@ public class PasswordHasher
 		return iterations + ":" + toHex(salt) + ":" + toHex(hash);
 	}
 
-	private static byte[] getSalt() throws NoSuchAlgorithmException
+	public static byte[] getSalt() throws NoSuchAlgorithmException
 	{
 		SecureRandom sr = SecureRandom.getInstance("SHA1PRNG");
 		byte[] salt = new byte[16];

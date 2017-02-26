@@ -32,7 +32,8 @@ public class AuthenticateService
 		User user = userService.getUserByUserName(inputUsername);
 		if (user != null) {
 			String password = user.getPassword();
-			String hashedPassword = PasswordHasher.generateStrongPasswordHash(inputPassword);
+			byte[] salt = user.getSalt();
+			String hashedPassword = PasswordHasher.generateStrongPasswordHash(inputPassword, salt);
 			if (password.equals(hashedPassword)) {
 				return true;
 			} else {
