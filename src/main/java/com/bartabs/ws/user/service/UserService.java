@@ -1,5 +1,8 @@
 package com.bartabs.ws.user.service;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -36,7 +39,7 @@ public class UserService
 		return user;
 	}
 
-	public Long createUser(final User user)
+	public Long createUser(final User user) throws NoSuchAlgorithmException, InvalidKeySpecException
 	{
 		Location location = user.getLocation();
 

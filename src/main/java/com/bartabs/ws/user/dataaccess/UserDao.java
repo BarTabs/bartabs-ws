@@ -1,5 +1,8 @@
 package com.bartabs.ws.user.dataaccess;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
+
 import com.bartabs.ws.exceptions.UserNotFoundException;
 import com.bartabs.ws.user.model.User;
 
@@ -10,7 +13,7 @@ public interface UserDao
 
 	public User getUserByUserName(String userName) throws UserNotFoundException;
 
-	public Long createUser(User user);
+	public Long createUser(User user) throws NoSuchAlgorithmException, InvalidKeySpecException;
 
 	public void updateUser(User user);
 
