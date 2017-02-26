@@ -26,7 +26,7 @@ public class AuthenticateService
 	@Autowired
 	private UserService userService;
 
-	public boolean authenticate(final String inputUsername, String inputPassword)
+	public boolean authenticate(final String inputUsername, final String inputPassword)
 			throws UserNotFoundException, InvalidPasswordException, NoSuchAlgorithmException, InvalidKeySpecException
 	{
 		User user = userService.getUserByUserName(inputUsername);

@@ -1,4 +1,4 @@
-package com.bartabs.ws.configuration.model;
+package com.bartabs.ws.authenticate.configuration.model;
 
 import java.util.Calendar;
 import java.util.Date;

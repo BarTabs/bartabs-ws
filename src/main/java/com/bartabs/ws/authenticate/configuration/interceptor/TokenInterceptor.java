@@ -1,4 +1,4 @@
-package com.bartabs.ws.configuration.interceptor;
+package com.bartabs.ws.authenticate.configuration.interceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

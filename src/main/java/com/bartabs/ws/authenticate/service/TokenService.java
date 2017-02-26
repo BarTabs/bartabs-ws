@@ -5,7 +5,7 @@ import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.bartabs.ws.configuration.model.TokenParams;
+import com.bartabs.ws.authenticate.configuration.model.TokenParams;
 import com.bartabs.ws.exceptions.TokenDecodeException;
 import com.bartabs.ws.exceptions.TokenEncodeException;
 
