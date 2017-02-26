@@ -23,10 +23,9 @@ public class ExampleDaoImpl implements ExampleDao
 	@Override
 	public List<Example> getData()
 	{
-		final String sql = "SELECT name FROM bartabs.test where objectid = :objectId";
+		final String sql = "SELECT name FROM bartabs.test";
 
 		final MapSqlParameterSource params = new MapSqlParameterSource();
-		params.addValue("objectId", "1");
 
 		return template.query(sql, params, new RowMapper<Example>()
 		{
@@ -34,11 +33,11 @@ public class ExampleDaoImpl implements ExampleDao
 			@Override
 			public Example mapRow(ResultSet rs, int arg1) throws SQLException
 			{
-				final Example shop = new Example();
-				shop.setName(rs.getString("name"));
+				final Example example = new Example();
+				example.setName(rs.getString("name"));
 				// shop.setStaffName("BarTabs");
 
-				return shop;
+				return example;
 			}
 
 		});
