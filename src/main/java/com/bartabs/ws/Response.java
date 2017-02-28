@@ -26,15 +26,6 @@ public class Response
 		return response;
 	}
 
-	public Response buildResponse(final String message)
-	{
-		Response response = new Response();
-		response.setStatus(0);
-		response.setMessage(message);
-
-		return response;
-	}
-
 	public Response buildErrorResponse(final String message)
 	{
 		Response response = new Response();
