@@ -25,7 +25,7 @@ public class MenuController extends Response
 	@Qualifier("Menu.MenuService")
 	private MenuService service;
 
-	@RequestMapping(value = "/menu/getmenu", method = RequestMethod.POST, produces = "application/json")
+	@RequestMapping(value = "/menu/getmenu", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody Response getMenu(@RequestParam("barID") final Long barID)
 	{
 
