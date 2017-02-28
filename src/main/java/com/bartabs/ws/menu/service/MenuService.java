@@ -60,6 +60,7 @@ public class MenuService
 			menuCategory.setName(category);
 			menuCategory.setTypes(menuTypes);
 
+			menuCategories.add(menuCategory);
 		}
 
 		menu.setCategories(menuCategories);

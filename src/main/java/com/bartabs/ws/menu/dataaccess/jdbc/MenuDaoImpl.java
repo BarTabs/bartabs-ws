@@ -33,7 +33,20 @@ public class MenuDaoImpl implements MenuDao
 		final MapSqlParameterSource params = new MapSqlParameterSource();
 		params.addValue("barID", barID);
 
-		return template.queryForObject(sql, params, Menu.class);
+		return template.queryForObject(sql, params, new RowMapper<Menu>()
+		{
+
+			@Override
+			public Menu mapRow(ResultSet rs, int rowNum) throws SQLException
+			{
+				final Menu row = new Menu();
+				row.setObjectID(rs.getLong("objectid"));
+				row.setBarID(rs.getLong("bar_id"));
+
+				return row;
+			}
+
+		});
 	}
 
 	@Override
@@ -107,7 +120,7 @@ public class MenuDaoImpl implements MenuDao
 		// @formatter:off
 		final String sql = ""
 				+ "SELECT category "
-				+ "FROM bartabs.menu_item "
+				+ "FROM bartabs.menu_items "
 				+ "WHERE menu_id = :menuID";
 		// @formatter:on
 
@@ -130,8 +143,8 @@ public class MenuDaoImpl implements MenuDao
 	{
 		// @formatter:off
 		final String sql = ""
-				+ "SELECT category "
-				+ "FROM bartabs.menu_item "
+				+ "SELECT type "
+				+ "FROM bartabs.menu_items "
 				+ "WHERE menu_id = :menuID "
 				+ "  AND category = :category";
 		// @formatter:on
@@ -167,7 +180,7 @@ public class MenuDaoImpl implements MenuDao
 		// @formatter:off
 		final String sql = ""
 				+ "SELECT objectid, menu_id, name, description, price, category, type "
-				+ "FROM bartabs.menu_item "
+				+ "FROM bartabs.menu_items "
 				+ "WHERE menu_id = :menuID "
 				+ wc.toString();
 		// @formatter:on
