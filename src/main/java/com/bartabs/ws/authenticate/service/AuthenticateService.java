@@ -6,6 +6,7 @@ import java.security.spec.InvalidKeySpecException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.bartabs.ws.authenticate.dataaccess.AuthenticateDao;
 import com.bartabs.ws.exceptions.InvalidPasswordException;
@@ -15,6 +16,7 @@ import com.bartabs.ws.user.service.UserService;
 import com.bartabs.ws.util.PasswordHasher;
 
 @Service("Authenticate.AuthenticateService")
+@Transactional("txManager")
 public class AuthenticateService
 {
 

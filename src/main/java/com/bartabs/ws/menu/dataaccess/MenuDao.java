@@ -18,6 +18,12 @@ public interface MenuDao
 
 	public void removeMenu(Long menuID);
 
+	public List<String> getCategories(Long menuID);
+
+	public List<String> getTypes(Long menuID, String category);
+
+	List<MenuItem> getMenuItems(Long menuID, String category, String type);
+
 	public List<MenuItem> getMenuItems(Long menuID);
 
 	public List<MenuItem> getMenuItemsByCategory(Long menuID, String category);

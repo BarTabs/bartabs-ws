@@ -3,11 +3,13 @@ package com.bartabs.ws.location.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.bartabs.ws.location.dataaccess.LocationDao;
 import com.bartabs.ws.location.model.Location;
 
 @Service("Location.LocationService")
+@Transactional("txManager")
 public class LocationService
 {
 	@Qualifier("Location.LocationDao")
