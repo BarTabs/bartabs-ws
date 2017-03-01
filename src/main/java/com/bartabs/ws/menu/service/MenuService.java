@@ -2,7 +2,6 @@ package com.bartabs.ws.menu.service;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,11 +11,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.bartabs.ws.exceptions.MenuNotFoundException;
 import com.bartabs.ws.location.service.LocationService;
+import com.bartabs.ws.menu.criteria.MenuCriteria;
 import com.bartabs.ws.menu.dataaccess.MenuDao;
 import com.bartabs.ws.menu.model.Menu;
-import com.bartabs.ws.menu.model.MenuCategory;
 import com.bartabs.ws.menu.model.MenuItem;
-import com.bartabs.ws.menu.model.MenuType;
 
 @Service("Menu.MenuService")
 @Transactional("txManager")
@@ -31,39 +29,14 @@ public class MenuService
 	@Autowired
 	private LocationService locationService;
 
-	public Menu getMenuByBarID(final Long barID) throws MenuNotFoundException
+	public Menu getMenuByBarID(final MenuCriteria criteria) throws MenuNotFoundException
 	{
-		Menu menu = dao.getMenuByBarID(barID);
+		Menu menu = dao.getMenuByBarID(criteria.getBarID());
 		Long menuID = menu.getObjectID();
+		criteria.setMenuID(menuID);
 
-		List<MenuCategory> menuCategories = new ArrayList<MenuCategory>();
-		List<String> categories = dao.getCategories(menuID);
-
-		// Get all categories under this menu
-		for (String category : categories) {
-			List<MenuType> menuTypes = new ArrayList<MenuType>();
-			List<String> types = dao.getTypes(menuID, category);
-
-			// Get all types under this category
-			for (String type : types) {
-				// Get all menu items under this menu category and type
-				List<MenuItem> menuItems = dao.getMenuItems(menuID, category, type);
-
-				MenuType menuType = new MenuType();
-				menuType.setName(type);
-				menuType.setItems(menuItems);
-
-				menuTypes.add(menuType);
-			}
-
-			MenuCategory menuCategory = new MenuCategory();
-			menuCategory.setName(category);
-			menuCategory.setTypes(menuTypes);
-
-			menuCategories.add(menuCategory);
-		}
-
-		menu.setCategories(menuCategories);
+		List<MenuItem> menuItems = dao.getMenuItems(criteria);
+		menu.setItems(menuItems);
 
 		return menu;
 	}
@@ -72,7 +45,11 @@ public class MenuService
 	{
 		Menu menu = dao.getMenuByID(menuID);
 
-		return getMenuByBarID(menu.getBarID());
+		final MenuCriteria criteria = new MenuCriteria();
+		criteria.setMenuID(menuID);
+		criteria.setBarID(menu.getBarID());
+
+		return getMenuByBarID(criteria);
 	}
 
 	public Long createMenu(final Menu menu) throws NoSuchAlgorithmException, InvalidKeySpecException
@@ -94,6 +71,29 @@ public class MenuService
 	public void removeMenu(final Long menuID)
 	{
 		dao.removeMenu(menuID);
+	}
+
+	public List<MenuItem> getMenuItems(final MenuCriteria criteria)
+	{
+		return dao.getMenuItems(criteria);
+	}
+
+	public List<String> getCategories(final MenuCriteria criteria)
+	{
+		final Menu menu = dao.getMenuByBarID(criteria.getBarID());
+		final Long menuID = menu.getObjectID();
+		criteria.setMenuID(menuID);
+
+		return dao.getCategories(criteria);
+	}
+
+	public List<String> getTypes(final MenuCriteria criteria)
+	{
+		final Menu menu = dao.getMenuByBarID(criteria.getBarID());
+		final Long menuID = menu.getObjectID();
+		criteria.setMenuID(menuID);
+
+		return dao.getTypes(criteria);
 	}
 
 }

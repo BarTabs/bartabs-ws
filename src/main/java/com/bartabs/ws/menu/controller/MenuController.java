@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.bartabs.ws.Response;
 import com.bartabs.ws.exceptions.MenuNotFoundException;
+import com.bartabs.ws.menu.criteria.MenuCriteria;
 import com.bartabs.ws.menu.model.Menu;
 import com.bartabs.ws.menu.service.MenuService;
 
@@ -26,19 +27,19 @@ public class MenuController extends Response
 	private MenuService service;
 
 	@RequestMapping(value = "/menu/getmenu", method = RequestMethod.GET, produces = "application/json")
-	public @ResponseBody Response getMenu(@RequestParam("barID") final Long barID)
+	public @ResponseBody Response getMenu(final MenuCriteria criteria)
 	{
 
 		try {
-			log.debug("Getting menu for bar: " + barID);
+			log.debug("Getting menu for bar: " + criteria.getBarID());
 
-			Menu menu = service.getMenuByBarID(barID);
+			Menu menu = service.getMenuByBarID(criteria);
 			return buildResponse(menu);
 
 		} catch (MenuNotFoundException ex) {
 			log.error(ex.toString(), ex);
 
-			return null;
+			return buildErrorResponse(ex.getMessage());
 		}
 
 	}
@@ -79,5 +80,56 @@ public class MenuController extends Response
 		service.removeMenu(menuID);
 
 		return buildResponse("Ok");
+	}
+
+	@RequestMapping(value = "/menu/getcategories", method = RequestMethod.GET, produces = "application/json")
+	public @ResponseBody Response getCategories(final MenuCriteria criteria)
+	{
+
+		try {
+			log.debug("Getting menu for bar: " + criteria.getBarID());
+
+			return buildResponse(service.getCategories(criteria));
+
+		} catch (Exception ex) {
+			log.error(ex.toString(), ex);
+
+			return buildErrorResponse(ex.getMessage());
+		}
+
+	}
+
+	@RequestMapping(value = "/menu/gettypes", method = RequestMethod.GET, produces = "application/json")
+	public @ResponseBody Response getTypes(final MenuCriteria criteria)
+	{
+
+		try {
+			log.debug("Getting menu for bar: " + criteria.getBarID());
+
+			return buildResponse(service.getTypes(criteria));
+
+		} catch (Exception ex) {
+			log.error(ex.toString(), ex);
+
+			return buildErrorResponse(ex.getMessage());
+		}
+
+	}
+
+	@RequestMapping(value = "/menu/getmenuitems", method = RequestMethod.GET, produces = "application/json")
+	public @ResponseBody Response getMenuItems(final MenuCriteria criteria)
+	{
+
+		try {
+			log.debug("Getting menu for bar: " + criteria.getBarID());
+
+			return buildResponse(service.getMenuItems(criteria));
+
+		} catch (Exception ex) {
+			log.error(ex.toString(), ex);
+
+			return buildErrorResponse(ex.getMessage());
+		}
+
 	}
 }

@@ -13,7 +13,7 @@ public class Menu
 	private Date createdDate;
 	private Date modifiedDate;
 
-	List<MenuCategory> categories;
+	private List<MenuItem> items;
 
 	public Long getObjectID()
 	{
@@ -55,14 +55,14 @@ public class Menu
 		this.modifiedDate = modifiedDate;
 	}
 
-	public List<MenuCategory> getCategories()
+	public List<MenuItem> getItems()
 	{
-		return categories;
+		return items;
 	}
 
-	public void setCategories(List<MenuCategory> categories)
+	public void setItems(List<MenuItem> items)
 	{
-		this.categories = categories;
+		this.items = items;
 	}
 
 }

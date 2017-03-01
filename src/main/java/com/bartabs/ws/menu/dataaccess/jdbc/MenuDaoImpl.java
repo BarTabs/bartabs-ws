@@ -10,6 +10,7 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.bartabs.ws.menu.criteria.MenuCriteria;
 import com.bartabs.ws.menu.dataaccess.MenuDao;
 import com.bartabs.ws.menu.model.Menu;
 import com.bartabs.ws.menu.model.MenuItem;
@@ -21,7 +22,7 @@ public class MenuDaoImpl implements MenuDao
 	NamedParameterJdbcTemplate template;
 
 	@Override
-	public Menu getMenuByBarID(Long barID)
+	public Menu getMenuByBarID(final Long barID)
 	{
 		// @formatter:off
 		final String sql = ""
@@ -50,7 +51,7 @@ public class MenuDaoImpl implements MenuDao
 	}
 
 	@Override
-	public Menu getMenuByID(Long menuID)
+	public Menu getMenuByID(final Long menuID)
 	{
 		// @formatter:off
 		final String sql = ""
@@ -66,7 +67,7 @@ public class MenuDaoImpl implements MenuDao
 	}
 
 	@Override
-	public Long createMenu(Menu menu)
+	public Long createMenu(final Menu menu)
 	{
 		// @formatter:off
 		final String sql = ""
@@ -84,7 +85,7 @@ public class MenuDaoImpl implements MenuDao
 	}
 
 	@Override
-	public void updateMenu(Menu menu)
+	public void updateMenu(final Menu menu)
 	{
 		// @formatter:off
 		final String sql = ""
@@ -103,7 +104,7 @@ public class MenuDaoImpl implements MenuDao
 	}
 
 	@Override
-	public void removeMenu(Long menuID)
+	public void removeMenu(final Long menuID)
 	{
 		final String sql = "DELETE FROM bartabs.menu WHERE objectid = :objectID";
 
@@ -115,17 +116,18 @@ public class MenuDaoImpl implements MenuDao
 	}
 
 	@Override
-	public List<String> getCategories(Long menuID)
+	public List<String> getCategories(final MenuCriteria criteria)
 	{
 		// @formatter:off
 		final String sql = ""
 				+ "SELECT category "
 				+ "FROM bartabs.menu_items "
-				+ "WHERE menu_id = :menuID";
+				+ "WHERE menu_id = :menuID "
+				+ "GROUP BY category";
 		// @formatter:on
 
 		final MapSqlParameterSource params = new MapSqlParameterSource();
-		params.addValue("menuID", menuID);
+		params.addValue("menuID", criteria.getMenuID());
 
 		return template.query(sql, params, new RowMapper<String>()
 		{
@@ -139,19 +141,20 @@ public class MenuDaoImpl implements MenuDao
 	}
 
 	@Override
-	public List<String> getTypes(Long menuID, String category)
+	public List<String> getTypes(final MenuCriteria criteria)
 	{
 		// @formatter:off
 		final String sql = ""
 				+ "SELECT type "
 				+ "FROM bartabs.menu_items "
 				+ "WHERE menu_id = :menuID "
-				+ "  AND category = :category";
+				+ "  AND category = :category "
+				+ "GROUP BY type ";
 		// @formatter:on
 
 		final MapSqlParameterSource params = new MapSqlParameterSource();
-		params.addValue("menuID", menuID);
-		params.addValue("category", category);
+		params.addValue("menuID", criteria.getMenuID());
+		params.addValue("category", criteria.getCategory());
 
 		return template.query(sql, params, new RowMapper<String>()
 		{
@@ -165,14 +168,16 @@ public class MenuDaoImpl implements MenuDao
 	}
 
 	@Override
-	public List<MenuItem> getMenuItems(final Long menuID, final String category, final String type)
+	public List<MenuItem> getMenuItems(final MenuCriteria criteria)
 	{
 		final StringBuilder wc = new StringBuilder();
 
+		final String category = criteria.getCategory();
 		if (category != null) {
 			wc.append(" AND category = :category ");
 		}
 
+		final String type = criteria.getType();
 		if (type != null) {
 			wc.append(" AND type = :type ");
 		}
@@ -186,7 +191,7 @@ public class MenuDaoImpl implements MenuDao
 		// @formatter:on
 
 		final MapSqlParameterSource params = new MapSqlParameterSource();
-		params.addValue("menuID", menuID);
+		params.addValue("menuID", criteria.getMenuID());
 		params.addValue("category", category);
 		params.addValue("type", type);
 
@@ -212,25 +217,36 @@ public class MenuDaoImpl implements MenuDao
 	}
 
 	@Override
-	public List<MenuItem> getMenuItems(final Long menuID)
+	public List<MenuItem> getMenuItemsByMenuID(final Long menuID)
 	{
-		return getMenuItems(menuID, null, null);
+		MenuCriteria criteria = new MenuCriteria();
+		criteria.setMenuID(menuID);
+
+		return getMenuItems(criteria);
 	}
 
 	@Override
-	public List<MenuItem> getMenuItemsByCategory(Long menuID, String category)
+	public List<MenuItem> getMenuItemsByCategory(final Long menuID, final String category)
 	{
-		return getMenuItems(menuID, category, null);
+		MenuCriteria criteria = new MenuCriteria();
+		criteria.setMenuID(menuID);
+		criteria.setCategory(category);
+
+		return getMenuItems(criteria);
 	}
 
 	@Override
-	public List<MenuItem> getMenuItemsByType(Long menuID, String type)
+	public List<MenuItem> getMenuItemsByType(final Long menuID, final String type)
 	{
-		return getMenuItems(menuID, null, type);
+		MenuCriteria criteria = new MenuCriteria();
+		criteria.setMenuID(menuID);
+		criteria.setType(type);
+
+		return getMenuItems(criteria);
 	}
 
 	@Override
-	public Long createMenuItem(MenuItem menuItem)
+	public Long createMenuItem(final MenuItem menuItem)
 	{
 		// @formatter:off
 		final String sql = ""
@@ -254,7 +270,7 @@ public class MenuDaoImpl implements MenuDao
 	}
 
 	@Override
-	public void updateMenuItem(MenuItem menuItem)
+	public void updateMenuItem(final MenuItem menuItem)
 	{
 		// @formatter:off
 		final String sql = "UPDATE bartabs.menu_item "
@@ -280,7 +296,7 @@ public class MenuDaoImpl implements MenuDao
 	}
 
 	@Override
-	public void removeMenuItem(MenuItem menuItem)
+	public void removeMenuItem(final MenuItem menuItem)
 	{
 		final String sql = "DELETE FROM bartabs.menu_item WHERE objectid = :objectID";
 

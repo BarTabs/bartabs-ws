@@ -2,6 +2,7 @@ package com.bartabs.ws.menu.dataaccess;
 
 import java.util.List;
 
+import com.bartabs.ws.menu.criteria.MenuCriteria;
 import com.bartabs.ws.menu.model.Menu;
 import com.bartabs.ws.menu.model.MenuItem;
 
@@ -18,13 +19,13 @@ public interface MenuDao
 
 	public void removeMenu(Long menuID);
 
-	public List<String> getCategories(Long menuID);
+	public List<String> getCategories(MenuCriteria criteria);
 
-	public List<String> getTypes(Long menuID, String category);
+	public List<String> getTypes(MenuCriteria criteria);
 
-	List<MenuItem> getMenuItems(Long menuID, String category, String type);
+	List<MenuItem> getMenuItems(MenuCriteria criteria);
 
-	public List<MenuItem> getMenuItems(Long menuID);
+	public List<MenuItem> getMenuItemsByMenuID(Long menuID);
 
 	public List<MenuItem> getMenuItemsByCategory(Long menuID, String category);
 
