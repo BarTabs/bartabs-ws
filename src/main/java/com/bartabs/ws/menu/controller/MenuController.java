@@ -33,8 +33,20 @@ public class MenuController extends Response
 		try {
 			log.debug("Getting menu for bar: " + criteria.getBarID());
 
-			Menu menu = service.getMenuByBarID(criteria);
-			return buildResponse(menu);
+			Response response = new Response();
+			if (criteria.getType() != null) {
+				response = buildResponse(service.getMenu(criteria));
+			} else if (criteria.getCategory() != null) {
+				response = buildResponse(service.getTypes(criteria));
+			} else if (criteria.getBarID() != null) {
+				response = buildResponse(service.getCategories(criteria));
+			} else if (criteria.getMenuID() != null) {
+				response = buildResponse(service.getMenuByID(criteria.getMenuID()));
+			} else {
+				response = buildErrorResponse("Illegal parameters.");
+			}
+
+			return response;
 
 		} catch (MenuNotFoundException ex) {
 			log.error(ex.toString(), ex);
@@ -80,56 +92,5 @@ public class MenuController extends Response
 		service.removeMenu(menuID);
 
 		return buildResponse("Ok");
-	}
-
-	@RequestMapping(value = "/menu/getcategories", method = RequestMethod.GET, produces = "application/json")
-	public @ResponseBody Response getCategories(final MenuCriteria criteria)
-	{
-
-		try {
-			log.debug("Getting menu for bar: " + criteria.getBarID());
-
-			return buildResponse(service.getCategories(criteria));
-
-		} catch (Exception ex) {
-			log.error(ex.toString(), ex);
-
-			return buildErrorResponse(ex.getMessage());
-		}
-
-	}
-
-	@RequestMapping(value = "/menu/gettypes", method = RequestMethod.GET, produces = "application/json")
-	public @ResponseBody Response getTypes(final MenuCriteria criteria)
-	{
-
-		try {
-			log.debug("Getting menu for bar: " + criteria.getBarID());
-
-			return buildResponse(service.getTypes(criteria));
-
-		} catch (Exception ex) {
-			log.error(ex.toString(), ex);
-
-			return buildErrorResponse(ex.getMessage());
-		}
-
-	}
-
-	@RequestMapping(value = "/menu/getmenuitems", method = RequestMethod.GET, produces = "application/json")
-	public @ResponseBody Response getMenuItems(final MenuCriteria criteria)
-	{
-
-		try {
-			log.debug("Getting menu for bar: " + criteria.getBarID());
-
-			return buildResponse(service.getMenuItems(criteria));
-
-		} catch (Exception ex) {
-			log.error(ex.toString(), ex);
-
-			return buildErrorResponse(ex.getMessage());
-		}
-
 	}
 }

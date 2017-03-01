@@ -29,16 +29,24 @@ public class MenuService
 	@Autowired
 	private LocationService locationService;
 
-	public Menu getMenuByBarID(final MenuCriteria criteria) throws MenuNotFoundException
+	public Menu getMenu(final MenuCriteria criteria)
 	{
 		Menu menu = dao.getMenuByBarID(criteria.getBarID());
 		Long menuID = menu.getObjectID();
 		criteria.setMenuID(menuID);
 
-		List<MenuItem> menuItems = dao.getMenuItems(criteria);
-		menu.setItems(menuItems);
+		List<MenuItem> menuItems = getMenuItems(criteria);
+		menu.setMenuItems(menuItems);
 
 		return menu;
+	}
+
+	public Menu getMenuByBarID(final Long barID) throws MenuNotFoundException
+	{
+		MenuCriteria criteria = new MenuCriteria();
+		criteria.setBarID(barID);
+
+		return getMenu(criteria);
 	}
 
 	public Menu getMenuByID(final Long menuID) throws MenuNotFoundException
@@ -47,9 +55,8 @@ public class MenuService
 
 		final MenuCriteria criteria = new MenuCriteria();
 		criteria.setMenuID(menuID);
-		criteria.setBarID(menu.getBarID());
 
-		return getMenuByBarID(criteria);
+		return getMenuByBarID(menu.getBarID());
 	}
 
 	public Long createMenu(final Menu menu) throws NoSuchAlgorithmException, InvalidKeySpecException
