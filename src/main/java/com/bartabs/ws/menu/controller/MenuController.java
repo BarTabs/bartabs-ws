@@ -1,5 +1,7 @@
 package com.bartabs.ws.menu.controller;
 
+import java.util.List;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,5 +94,12 @@ public class MenuController extends Response
 		service.removeMenu(menuID);
 
 		return buildResponse("Ok");
+	}
+
+	@RequestMapping(value = "/menu/getcategories", method = RequestMethod.GET, produces = "application/json")
+	public @ResponseBody Response get(final MenuCriteria criteria)
+	{
+		List<String> categories = service.getCategories(criteria);
+		return buildResponse(categories);
 	}
 }

@@ -121,13 +121,14 @@ public class MenuDaoImpl implements MenuDao
 		// @formatter:off
 		final String sql = ""
 				+ "SELECT category "
-				+ "FROM bartabs.menu_items "
-				+ "WHERE menu_id = :menuID "
+				+ "FROM bartabs.menu_items mi "
+				+ "JOIN bartabs.menu m ON m.objectid = mi.menu_id "
+				+ "WHERE m.bar_id = :barID "
 				+ "GROUP BY category";
 		// @formatter:on
 
 		final MapSqlParameterSource params = new MapSqlParameterSource();
-		params.addValue("menuID", criteria.getMenuID());
+		params.addValue("barID", criteria.getBarID());
 
 		return template.query(sql, params, new RowMapper<String>()
 		{
@@ -146,14 +147,15 @@ public class MenuDaoImpl implements MenuDao
 		// @formatter:off
 		final String sql = ""
 				+ "SELECT type "
-				+ "FROM bartabs.menu_items "
-				+ "WHERE menu_id = :menuID "
-				+ "  AND category = :category "
-				+ "GROUP BY type ";
+				+ "FROM bartabs.menu_items mi "
+				+ "JOIN bartabs.menu m ON m.objectid = mi.menu_id "
+				+ "WHERE m.bar_id = :barID "
+				+ "	AND mi.category = :category "
+				+ "GROUP BY type";
 		// @formatter:on
 
 		final MapSqlParameterSource params = new MapSqlParameterSource();
-		params.addValue("menuID", criteria.getMenuID());
+		params.addValue("barID", criteria.getBarID());
 		params.addValue("category", criteria.getCategory());
 
 		return template.query(sql, params, new RowMapper<String>()

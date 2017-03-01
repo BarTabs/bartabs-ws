@@ -87,19 +87,11 @@ public class MenuService
 
 	public List<String> getCategories(final MenuCriteria criteria)
 	{
-		final Menu menu = dao.getMenuByBarID(criteria.getBarID());
-		final Long menuID = menu.getObjectID();
-		criteria.setMenuID(menuID);
-
 		return dao.getCategories(criteria);
 	}
 
 	public List<String> getTypes(final MenuCriteria criteria)
 	{
-		final Menu menu = dao.getMenuByBarID(criteria.getBarID());
-		final Long menuID = menu.getObjectID();
-		criteria.setMenuID(menuID);
-
 		return dao.getTypes(criteria);
 	}
 

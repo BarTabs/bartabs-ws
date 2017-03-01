@@ -24,13 +24,13 @@ public class TokenInterceptor extends HandlerInterceptorAdapter
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception
 	{
-		final String token = request.getHeader("authorization");
-
-		if (token == null || token.isEmpty()) {
-			return false;
-		}
-
 		try {
+			final String token = request.getHeader("authorization");
+
+			if (token == null || token.isEmpty()) {
+				return false;
+			}
+
 			Jws<Claims> claims = tokenService.decodeToken(token);
 			if (claims != null) {
 				return true;
