@@ -139,6 +139,20 @@ public class MenuController extends Response
 
 	}
 
+	@RequestMapping(value = "/menu/createmenuitem", method = RequestMethod.POST, produces = "application/json")
+	public @ResponseBody Response createMenuItem(final MenuItem menuItem)
+	{
+		try {
+			MenuItem newMenuItem = service.createMenuItem(menuItem);
+
+			return buildResponse(newMenuItem);
+		} catch (Exception ex) {
+			log.error(ex.toString(), ex);
+
+			return buildErrorResponse("Error creating menu item.");
+		}
+	}
+
 	@RequestMapping(value = "/menu/updatemenuitem", method = RequestMethod.POST, produces = "application/json")
 	public @ResponseBody Response updateMenuItem(final MenuItem menuItem)
 	{
