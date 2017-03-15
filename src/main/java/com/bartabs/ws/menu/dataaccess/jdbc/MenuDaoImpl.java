@@ -74,14 +74,17 @@ public class MenuDaoImpl implements MenuDao
 				+ "INSERT INTO bartabs.menu "
 				+ "  (bar_id created_timestamp, modified_timestamp) "
 				+ "VALUES "
-				+ "  (:barId, now(), now()) "
-				+ "RETURNING objectid";
+				+ "  (:barId, now(), now()) ";
 		// @formatter:on
 
 		final MapSqlParameterSource params = new MapSqlParameterSource();
 		params.addValue("barId", menu.getBarID());
 
-		return template.queryForObject(sql, params, Long.class);
+		template.update(sql, params);
+
+		final String getIDQuery = "SELECT MAX(objectid) FROM bartabs.menu ";
+
+		return template.queryForObject(getIDQuery, new MapSqlParameterSource(), Long.class);
 	}
 
 	@Override
@@ -286,12 +289,11 @@ public class MenuDaoImpl implements MenuDao
 	{
 		// @formatter:off
 		final String sql = ""
-				+ "INSERT INTO bartabs.menu_item "
+				+ "INSERT INTO bartabs.menu_items "
 				+ "  (menu_id, name, description, price, created_timestamp, modified_timestamp, "
 				+ "   category, type) "
 				+ "VALUES"
-				+ "  (:menuID, :name, :description, :price, now(), now(), :category, :type) "
-				+ "RETURNING objectid";
+				+ "  (:menuID, :name, :description, :price, now(), now(), :category, :type)";
 		// @formatter:on
 
 		final MapSqlParameterSource params = new MapSqlParameterSource();
@@ -302,7 +304,11 @@ public class MenuDaoImpl implements MenuDao
 		params.addValue("category", menuItem.getCategory());
 		params.addValue("type", menuItem.getType());
 
-		return template.queryForObject(sql, params, Long.class);
+		template.update(sql, params);
+
+		final String getIDQuery = "SELECT MAX(objectid) FROM bartabs.menu_items ";
+
+		return template.queryForObject(getIDQuery, new MapSqlParameterSource(), Long.class);
 	}
 
 	@Override
@@ -310,7 +316,7 @@ public class MenuDaoImpl implements MenuDao
 	{
 		// @formatter:off
 		final String sql = ""
-				+ "UPDATE bartabs.menu_item "
+				+ "UPDATE bartabs.menu_items "
 				+ "SET menuID = :menuID, "
 				+ "    name = :name, "
 				+ "    description = :description, "
@@ -335,7 +341,7 @@ public class MenuDaoImpl implements MenuDao
 	@Override
 	public void removeMenuItem(final Long menuItemID)
 	{
-		final String sql = "DELETE FROM bartabs.menu_item WHERE objectid = :objectID";
+		final String sql = "DELETE FROM bartabs.menu_items WHERE objectid = :objectID";
 
 		final MapSqlParameterSource params = new MapSqlParameterSource();
 		params.addValue("objectID", menuItemID);
