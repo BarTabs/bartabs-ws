@@ -23,7 +23,9 @@ public interface MenuDao
 
 	public List<String> getTypes(MenuCriteria criteria);
 
-	List<MenuItem> getMenuItems(MenuCriteria criteria);
+	public MenuItem getMenuItemsByID(Long objectID);
+
+	public List<MenuItem> getMenuItems(MenuCriteria criteria);
 
 	public List<MenuItem> getMenuItemsByMenuID(Long menuID);
 
@@ -35,6 +37,6 @@ public interface MenuDao
 
 	public void updateMenuItem(MenuItem menuItem);
 
-	public void removeMenuItem(MenuItem menuItem);
+	public void removeMenuItem(Long menuItemID);
 
 }

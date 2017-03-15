@@ -80,6 +80,16 @@ public class MenuService
 		dao.removeMenu(menuID);
 	}
 
+	public void createMenuItems(final MenuItem menuItem)
+	{
+		dao.createMenuItem(menuItem);
+	}
+
+	public void updateMenuItems(final MenuItem menuItem)
+	{
+		dao.updateMenuItem(menuItem);
+	}
+
 	public List<MenuItem> getMenuItems(final MenuCriteria criteria)
 	{
 		return dao.getMenuItems(criteria);
@@ -93,6 +103,35 @@ public class MenuService
 	public List<String> getTypes(final MenuCriteria criteria)
 	{
 		return dao.getTypes(criteria);
+	}
+
+	public MenuItem getMenuItemByID(Long objectID)
+	{
+		final MenuItem menuItem = dao.getMenuItemsByID(objectID);
+		// TODO: Add menu ingredients
+
+		return menuItem;
+	}
+
+	public MenuItem createMenuItem(MenuItem menuItem)
+	{
+		Long menuItemID = dao.createMenuItem(menuItem);
+		MenuItem newMenuItem = dao.getMenuItemsByID(menuItemID);
+
+		return newMenuItem;
+	}
+
+	public MenuItem updateMenuItem(MenuItem menuItem)
+	{
+		dao.updateMenuItem(menuItem);
+		MenuItem updatedMenuItem = dao.getMenuItemsByID(menuItem.getObjectID());
+
+		return updatedMenuItem;
+	}
+
+	public void removeMenuItem(Long menuItemID)
+	{
+		dao.removeMenuItem(menuItemID);
 	}
 
 }

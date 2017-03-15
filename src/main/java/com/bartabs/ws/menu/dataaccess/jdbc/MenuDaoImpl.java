@@ -170,6 +170,40 @@ public class MenuDaoImpl implements MenuDao
 	}
 
 	@Override
+	public MenuItem getMenuItemsByID(Long objectID)
+	{
+		// @formatter:off
+		final String sql = ""
+				+ "SELECT objectid, menu_id, name, description, price, category, type "
+				+ "FROM bartabs.menu_items "
+				+ "WHERE objectid = :objectID ";
+		// @formatter:on
+
+		final MapSqlParameterSource params = new MapSqlParameterSource();
+		params.addValue("objectID", objectID);
+
+		return template.queryForObject(sql, params, new RowMapper<MenuItem>()
+		{
+
+			@Override
+			public MenuItem mapRow(ResultSet rs, int arg1) throws SQLException
+			{
+				final MenuItem row = new MenuItem();
+				row.setObjectID(rs.getLong("objectid"));
+				row.setMenuID(rs.getLong("menu_id"));
+				row.setName(rs.getString("name"));
+				row.setDescription(rs.getString("description"));
+				row.setPrice(rs.getBigDecimal("price"));
+				row.setCategory(rs.getString("category"));
+				row.setType(rs.getString("type"));
+
+				return row;
+			}
+
+		});
+	}
+
+	@Override
 	public List<MenuItem> getMenuItems(final MenuCriteria criteria)
 	{
 		final StringBuilder wc = new StringBuilder();
@@ -275,7 +309,8 @@ public class MenuDaoImpl implements MenuDao
 	public void updateMenuItem(final MenuItem menuItem)
 	{
 		// @formatter:off
-		final String sql = "UPDATE bartabs.menu_item "
+		final String sql = ""
+				+ "UPDATE bartabs.menu_item "
 				+ "SET menuID = :menuID, "
 				+ "    name = :name, "
 				+ "    description = :description, "
@@ -298,12 +333,12 @@ public class MenuDaoImpl implements MenuDao
 	}
 
 	@Override
-	public void removeMenuItem(final MenuItem menuItem)
+	public void removeMenuItem(final Long menuItemID)
 	{
 		final String sql = "DELETE FROM bartabs.menu_item WHERE objectid = :objectID";
 
 		final MapSqlParameterSource params = new MapSqlParameterSource();
-		params.addValue("objectID", menuItem.getObjectID());
+		params.addValue("objectID", menuItemID);
 
 		template.update(sql, params);
 

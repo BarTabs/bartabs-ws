@@ -16,6 +16,7 @@ import com.bartabs.ws.Response;
 import com.bartabs.ws.exceptions.MenuNotFoundException;
 import com.bartabs.ws.menu.criteria.MenuCriteria;
 import com.bartabs.ws.menu.model.Menu;
+import com.bartabs.ws.menu.model.MenuItem;
 import com.bartabs.ws.menu.service.MenuService;
 
 @Controller("Menu.MenuController")
@@ -51,9 +52,11 @@ public class MenuController extends Response
 			return response;
 
 		} catch (MenuNotFoundException ex) {
-			log.error(ex.toString(), ex);
-
+			log.error(ex.getMessage(), ex);
 			return buildErrorResponse(ex.getMessage());
+		} catch (Exception ex) {
+			log.error(ex.toString(), ex);
+			return buildErrorResponse("Error retrieving menu");
 		}
 
 	}
@@ -67,8 +70,10 @@ public class MenuController extends Response
 
 			return buildResponse(newMenu);
 		} catch (MenuNotFoundException ex) {
+			log.error(ex.getMessage(), ex);
 			return buildErrorResponse(ex.getMessage());
 		} catch (Exception ex) {
+			log.error(ex.toString(), ex);
 			return buildErrorResponse("Error processing menu creation");
 		}
 	}
@@ -81,9 +86,12 @@ public class MenuController extends Response
 			updatedMenu = service.updateMenu(menu);
 
 			return buildResponse(updatedMenu);
-		} catch (MenuNotFoundException e) {
-
-			return buildErrorResponse(e.getMessage());
+		} catch (MenuNotFoundException ex) {
+			log.error(ex.getMessage(), ex);
+			return buildErrorResponse(ex.getMessage());
+		} catch (Exception ex) {
+			log.error(ex.toString(), ex);
+			return buildErrorResponse(ex.getMessage());
 		}
 
 	}
@@ -91,15 +99,72 @@ public class MenuController extends Response
 	@RequestMapping(value = "/menu/deletemenu", method = RequestMethod.POST, produces = "application/json")
 	public @ResponseBody Response deleteMenu(@RequestParam("menuID") final Long menuID)
 	{
-		service.removeMenu(menuID);
+		try {
+			service.removeMenu(menuID);
 
-		return buildResponse("Ok");
+			return buildResponse("Ok");
+		} catch (Exception ex) {
+			log.error(ex.toString(), ex);
+
+			return buildErrorResponse("Error deleting menu");
+		}
 	}
 
 	@RequestMapping(value = "/menu/getcategories", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody Response get(final MenuCriteria criteria)
 	{
-		List<String> categories = service.getCategories(criteria);
-		return buildResponse(categories);
+		try {
+			List<String> categories = service.getCategories(criteria);
+			return buildResponse(categories);
+		} catch (Exception ex) {
+			log.error(ex.toString(), ex);
+			return buildErrorResponse("Error getting categories.");
+		}
 	}
+
+	@RequestMapping(value = "/menu/getmenuitem", method = RequestMethod.GET, produces = "application/json")
+	public @ResponseBody Response getMenu(@RequestParam("objectID") Long objectID)
+	{
+
+		try {
+
+			final MenuItem menuItem = service.getMenuItemByID(objectID);
+
+			return buildResponse(menuItem);
+
+		} catch (Exception ex) {
+			log.error(ex.toString(), ex);
+			return buildErrorResponse(ex.getMessage());
+		}
+
+	}
+
+	@RequestMapping(value = "/menu/updatemenuitem", method = RequestMethod.POST, produces = "application/json")
+	public @ResponseBody Response updateMenuItem(final MenuItem menuItem)
+	{
+		try {
+			MenuItem updatedMenuItem = service.updateMenuItem(menuItem);
+
+			return buildResponse(updatedMenuItem);
+		} catch (Exception ex) {
+			log.error(ex.toString(), ex);
+
+			return buildErrorResponse("Error updating menu item.");
+		}
+	}
+
+	@RequestMapping(value = "/menu/deletemenuitem", method = RequestMethod.POST, produces = "application/json")
+	public @ResponseBody Response deleteMenuItem(@RequestParam("objectID") final Long objectID)
+	{
+		try {
+			service.removeMenu(objectID);
+
+			return buildResponse("Ok");
+		} catch (Exception ex) {
+			log.error(ex.toString(), ex);
+
+			return buildErrorResponse("Error deleting menu item.");
+		}
+	}
+
 }
