@@ -28,7 +28,7 @@ public class AuthenticateService
 	@Autowired
 	private UserService userService;
 
-	public boolean authenticate(final String inputUsername, final String inputPassword)
+	public User authenticate(final String inputUsername, final String inputPassword)
 			throws UserNotFoundException, InvalidPasswordException, NoSuchAlgorithmException, InvalidKeySpecException
 	{
 		User user = userService.getUserByUserName(inputUsername);
@@ -37,7 +37,10 @@ public class AuthenticateService
 			byte[] salt = user.getSalt();
 			String hashedPassword = PasswordHasher.generateStrongPasswordHash(inputPassword, salt);
 			if (password.equals(hashedPassword)) {
-				return true;
+				user.setAuthenticated(true);
+				user.setPassword(null);
+				user.setSalt(null);
+				return user;
 			} else {
 				throw new InvalidPasswordException();
 			}

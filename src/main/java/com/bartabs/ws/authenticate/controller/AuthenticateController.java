@@ -1,5 +1,7 @@
 package com.bartabs.ws.authenticate.controller;
 
+import java.util.Objects;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -13,6 +15,7 @@ import com.bartabs.ws.authenticate.service.AuthenticateService;
 import com.bartabs.ws.authenticate.service.TokenService;
 import com.bartabs.ws.exceptions.InvalidPasswordException;
 import com.bartabs.ws.exceptions.UserNotFoundException;
+import com.bartabs.ws.user.model.User;
 
 @Controller("Authenticate.AuthenticateController")
 public class AuthenticateController extends Response
@@ -36,11 +39,14 @@ public class AuthenticateController extends Response
 
 			String token = null;
 
-			if (authenticateService.authenticate(username, password)) {
+			final User user = authenticateService.authenticate(username, password);
+
+			if (Objects.equals(user.getAuthenticated(), true)) {
 				token = tokenService.encodeToken(username);
+				user.setToken(token);
 			}
 
-			return buildResponse(token);
+			return buildResponse(user);
 
 		} catch (UserNotFoundException ex) {
 

@@ -21,6 +21,8 @@ public class User
 	private byte[] salt;
 	private Date createdTimestamp;
 	private Date modifiedTimestamp;
+	private Boolean authenticated = false;
+	private String token;
 
 	private Location location;
 
@@ -142,6 +144,26 @@ public class User
 	public void setModifiedTimestamp(Date modifiedTimestamp)
 	{
 		this.modifiedTimestamp = modifiedTimestamp;
+	}
+
+	public Boolean getAuthenticated()
+	{
+		return authenticated;
+	}
+
+	public void setAuthenticated(Boolean authenticated)
+	{
+		this.authenticated = authenticated;
+	}
+
+	public String getToken()
+	{
+		return token;
+	}
+
+	public void setToken(String token)
+	{
+		this.token = token;
 	}
 
 	public Location getLocation()
