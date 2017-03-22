@@ -66,7 +66,7 @@ public class OrderController extends Response
 
 	}
 
-	@RequestMapping(value = "/order/placeOrder", method = RequestMethod.POST, produces = "application/json")
+	@RequestMapping(value = "/order/placeorder", method = RequestMethod.POST, produces = "application/json")
 	public @ResponseBody Response updateMenuItem(final Order order)
 	{
 		try {

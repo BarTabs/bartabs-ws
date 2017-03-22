@@ -24,7 +24,7 @@ public class OrderDaoImpl implements OrderDao
 	NamedParameterJdbcTemplate template;
 
 	@Override
-	public void placeOrder(final Order order)
+	public Long placeOrder(final Order order)
 	{
 		// @formatter:off
 		String sql = ""
@@ -39,6 +39,10 @@ public class OrderDaoImpl implements OrderDao
 		params.addValue("barID", order.getBarID());
 
 		template.update(sql, params);
+
+		String getIDQuery = "SELECT MAX(objectid) FROM bartabs.menu ";
+
+		return template.queryForObject(getIDQuery, new MapSqlParameterSource(), Long.class);
 	}
 
 	@Override
@@ -297,6 +301,25 @@ public class OrderDaoImpl implements OrderDao
 			}
 
 		});
+	}
+
+	@Override
+	public void linkOrderItem(Long orderID, MenuItem orderItem)
+	{
+		// @formatter:off
+		String sql = ""
+				+ "INSERT bartabs.order_items "
+				+ "  (order_id, menu_item_id) "
+				+ "VALUES"
+				+ "  (:orderID, :menuItemID)";
+		// @formatter:on
+
+		MapSqlParameterSource params = new MapSqlParameterSource();
+		params.addValue("orderID", orderID);
+		params.addValue("menuItemID", orderItem.getObjectID());
+
+		template.update(sql, params);
+
 	}
 
 }

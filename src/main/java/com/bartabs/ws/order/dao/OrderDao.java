@@ -7,7 +7,7 @@ import com.bartabs.ws.order.model.Order;
 
 public interface OrderDao
 {
-	public void placeOrder(Order order);
+	public Long placeOrder(Order order);
 
 	public List<Order> getBarOrders(Long barID, Boolean openOnly);
 
@@ -16,5 +16,7 @@ public interface OrderDao
 	public Order getOrder(Long orderID);
 
 	public List<MenuItem> getOrderItems(Long orderID);
+
+	public void linkOrderItem(Long orderID, MenuItem orderItem);
 
 }

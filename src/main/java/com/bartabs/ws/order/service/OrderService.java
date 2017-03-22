@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.bartabs.ws.menu.model.MenuItem;
 import com.bartabs.ws.order.dao.OrderDao;
 import com.bartabs.ws.order.model.Order;
 
@@ -20,7 +21,12 @@ public class OrderService
 
 	public void placeOrder(final Order order)
 	{
-		dao.placeOrder(order);
+		Long orderID = dao.placeOrder(order);
+
+		List<MenuItem> orderItems = order.getOrderItems();
+		for (MenuItem oi : orderItems) {
+			dao.linkOrderItem(orderID, oi);
+		}
 	}
 
 	public List<Order> getOrdersByBarID(final Long barID, final Boolean openOnly)
