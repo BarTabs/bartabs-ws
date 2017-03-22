@@ -24,8 +24,10 @@ public class OrderService
 		Long orderID = dao.placeOrder(order);
 
 		List<MenuItem> orderItems = order.getOrderItems();
-		for (MenuItem oi : orderItems) {
-			dao.linkOrderItem(orderID, oi);
+		if (orderItems != null && !orderItems.isEmpty()) {
+			for (MenuItem oi : orderItems) {
+				dao.linkOrderItem(orderID, oi);
+			}
 		}
 	}
 
