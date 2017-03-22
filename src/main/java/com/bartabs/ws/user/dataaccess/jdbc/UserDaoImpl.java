@@ -18,17 +18,16 @@ import com.bartabs.ws.exceptions.UserNotFoundException;
 import com.bartabs.ws.location.model.Location;
 import com.bartabs.ws.user.dataaccess.UserDao;
 import com.bartabs.ws.user.model.User;
+import com.bartabs.ws.util.NameFormatter;
 import com.bartabs.ws.util.PasswordHasher;
 
 @Repository("User.UserDao")
-public class UserDaoImpl implements UserDao
-{
+public class UserDaoImpl implements UserDao {
 	@Autowired
 	NamedParameterJdbcTemplate template;
 
 	@Override
-	public User getUserByID(final Long objectID) throws UserNotFoundException
-	{
+	public User getUserByID(final Long objectID) throws UserNotFoundException {
 		try {
 			// @formatter:off
 			String sql = ""
@@ -40,17 +39,21 @@ public class UserDaoImpl implements UserDao
 				+ "WHERE u.objectid = :objectID ";
 			// @formatter:on
 
-			return template.queryForObject(sql, new MapSqlParameterSource("objectID", objectID), new RowMapper<User>()
-			{
+			return template.queryForObject(sql, new MapSqlParameterSource("objectID", objectID), new RowMapper<User>() {
 
 				@Override
-				public User mapRow(ResultSet rs, int arg1) throws SQLException
-				{
+				public User mapRow(ResultSet rs, int arg1) throws SQLException {
 					User user = new User();
 					user.setObjectID(rs.getLong("objectid"));
-					user.setFirstName(rs.getString("first_name"));
-					user.setLastName(rs.getString("last_name"));
-					user.setMiddleInitial(rs.getString("middle_initial"));
+
+					String firstName = rs.getString("first_name");
+					String lastName = rs.getString("last_name");
+					String middleInitial = rs.getString("middle_initial");
+
+					user.setFirstName(firstName);
+					user.setLastName(lastName);
+					user.setMiddleInitial(middleInitial);
+					user.setFormattedName(NameFormatter.format(firstName, lastName, middleInitial, false));
 					user.setPhoneNumber(rs.getString("phone_number"));
 
 					Integer userType = rs.getInt("user_type");
@@ -85,8 +88,7 @@ public class UserDaoImpl implements UserDao
 	}
 
 	@Override
-	public User getUserByUserName(final String username) throws UserNotFoundException
-	{
+	public User getUserByUserName(final String username) throws UserNotFoundException {
 		try {
 		// @formatter:off
 		String sql = ""
@@ -98,17 +100,21 @@ public class UserDaoImpl implements UserDao
 			+ "WHERE username = :username";
 		// @formatter:on
 
-			return template.queryForObject(sql, new MapSqlParameterSource("username", username), new RowMapper<User>()
-			{
+			return template.queryForObject(sql, new MapSqlParameterSource("username", username), new RowMapper<User>() {
 
 				@Override
-				public User mapRow(ResultSet rs, int arg1) throws SQLException
-				{
+				public User mapRow(ResultSet rs, int arg1) throws SQLException {
 					User user = new User();
 					user.setObjectID(rs.getLong("objectid"));
-					user.setFirstName(rs.getString("first_name"));
-					user.setLastName(rs.getString("last_name"));
-					user.setMiddleInitial(rs.getString("middle_initial"));
+
+					String firstName = rs.getString("first_name");
+					String lastName = rs.getString("last_name");
+					String middleInitial = rs.getString("middle_initial");
+
+					user.setFirstName(firstName);
+					user.setLastName(lastName);
+					user.setMiddleInitial(middleInitial);
+					user.setFormattedName(NameFormatter.format(firstName, lastName, middleInitial, false));
 					user.setPhoneNumber(rs.getString("phone_number"));
 
 					Integer userType = rs.getInt("user_type");
@@ -144,8 +150,7 @@ public class UserDaoImpl implements UserDao
 
 	@Override
 	public Long createUser(final User user)
-			throws NoSuchAlgorithmException, InvalidKeySpecException, DuplicateUserNameException
-	{
+			throws NoSuchAlgorithmException, InvalidKeySpecException, DuplicateUserNameException {
 		try {
 		// @formatter:off
 		String sql = "" 
@@ -182,8 +187,7 @@ public class UserDaoImpl implements UserDao
 	}
 
 	@Override
-	public void updateUser(final User user)
-	{
+	public void updateUser(final User user) {
 		// @formatter:off
 		String sql = ""
 			+ "UPDATE bartabs.user "
@@ -208,11 +212,12 @@ public class UserDaoImpl implements UserDao
 	}
 
 	@Override
-	public void removeUser(final User user)
-	{
+	public void removeUser(final User user) {
 		// @formatter:off
 		String sql = ""
-			+ "DELETE FROM bartabs.user "
+			+ "UPDATE bartabs.user "
+			+ "SET 	deleted = 1, "
+			+ "		active = 0 "
 			+ "WHERE objectid = :objectID ";
 		// @formatter:on
 
