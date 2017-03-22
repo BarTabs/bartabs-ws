@@ -61,8 +61,9 @@ public class UserController extends Response
 			Long userID = service.createUser(user);
 			final User newUser = service.getUserByID(userID);
 			final String token = tokenService.encodeToken(newUser.getUsername());
+			user.setToken(token);
 
-			return buildResponse(token);
+			return buildResponse(user);
 		} catch (DuplicateUserNameException ex) {
 			return buildErrorResponse(ex.getMessage());
 		} catch (UserNotFoundException ex) {
