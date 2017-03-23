@@ -7,6 +7,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -67,7 +68,7 @@ public class OrderController extends Response
 	}
 
 	@RequestMapping(value = "/order/placeorder", method = RequestMethod.POST, produces = "application/json")
-	public @ResponseBody Response updateMenuItem(final Order order)
+	public @ResponseBody Response updateMenuItem(@RequestBody final Order order)
 	{
 		try {
 			service.placeOrder(order);

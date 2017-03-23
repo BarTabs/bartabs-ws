@@ -40,7 +40,7 @@ public class OrderDaoImpl implements OrderDao
 
 		template.update(sql, params);
 
-		String getIDQuery = "SELECT MAX(objectid) FROM bartabs.menu ";
+		String getIDQuery = "SELECT MAX(objectid) FROM bartabs.orders ";
 
 		return template.queryForObject(getIDQuery, new MapSqlParameterSource(), Long.class);
 	}

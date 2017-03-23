@@ -172,7 +172,6 @@ public class MenuController extends Response
 	{
 		try {
 			service.removeMenuItem(objectID);
-
 			return buildResponse("Ok");
 		} catch (Exception ex) {
 			log.error(ex.toString(), ex);
