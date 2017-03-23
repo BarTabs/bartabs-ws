@@ -109,7 +109,12 @@ public class MenuDaoImpl implements MenuDao
 	@Override
 	public void removeMenu(final Long menuID)
 	{
-		final String sql = "DELETE FROM bartabs.menu WHERE objectid = :objectID";
+		// @formatter:off
+		final String sql = ""
+				+ "UPDATE bartabs.menu "
+				+ "SET deleted = true "
+				+ "WHERE objectid = :objectID";
+		// @formatter:on
 
 		final MapSqlParameterSource params = new MapSqlParameterSource();
 		params.addValue("objectID", menuID);
@@ -226,6 +231,7 @@ public class MenuDaoImpl implements MenuDao
 				+ "SELECT objectid, menu_id, name, description, price, category, type "
 				+ "FROM bartabs.menu_items "
 				+ "WHERE menu_id = :menuID "
+				+ "  AND deleted = false "
 				+ wc.toString();
 		// @formatter:on
 
@@ -341,7 +347,11 @@ public class MenuDaoImpl implements MenuDao
 	@Override
 	public void removeMenuItem(final Long menuItemID)
 	{
-		final String sql = "DELETE FROM bartabs.menu_items WHERE objectid = :objectID";
+		// @formatter:off
+		final String sql = "UPDATE bartabs.menu_items " 
+				+ "SET deleted = true " 
+				+ "WHERE objectid = :objectID";
+		// @formatter:on
 
 		final MapSqlParameterSource params = new MapSqlParameterSource();
 		params.addValue("objectID", menuItemID);
