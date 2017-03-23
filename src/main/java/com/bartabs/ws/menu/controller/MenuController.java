@@ -171,7 +171,7 @@ public class MenuController extends Response
 	public @ResponseBody Response deleteMenuItem(@RequestParam("objectID") final Long objectID)
 	{
 		try {
-			service.removeMenu(objectID);
+			service.removeMenuItem(objectID);
 
 			return buildResponse("Ok");
 		} catch (Exception ex) {
