@@ -7,6 +7,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -17,7 +18,8 @@ import com.bartabs.ws.employee.model.Employee;
 import com.bartabs.ws.employee.service.EmployeeService;
 
 @Controller("Employee.EmployeeController")
-public class EmployeeController extends Response {
+public class EmployeeController extends Response
+{
 
 	private final Log log = LogFactory.getLog(this.getClass());
 
@@ -26,7 +28,8 @@ public class EmployeeController extends Response {
 	private EmployeeService service;
 
 	@RequestMapping(value = "/employee/getemployees", method = RequestMethod.GET, produces = "application/json")
-	public @ResponseBody Response getEmployees(@RequestParam(value = "barID", required = false) Long barID) {
+	public @ResponseBody Response getEmployees(@RequestParam(value = "barID", required = false) Long barID)
+	{
 
 		try {
 			if (barID != null) {
@@ -46,7 +49,8 @@ public class EmployeeController extends Response {
 	}
 
 	@RequestMapping(value = "/employee/createemployee", method = RequestMethod.POST, produces = "application/json")
-	public @ResponseBody Response createEmployee(final Employee employee) {
+	public @ResponseBody Response createEmployee(@RequestBody final Employee employee)
+	{
 		try {
 			Employee newEmployee = service.createEmployee(employee);
 
@@ -57,7 +61,8 @@ public class EmployeeController extends Response {
 	}
 
 	@RequestMapping(value = "/employee/updateemployee", method = RequestMethod.POST, produces = "application/json")
-	public @ResponseBody Response updateEmployee(final Employee employee) {
+	public @ResponseBody Response updateEmployee(@RequestBody final Employee employee)
+	{
 		try {
 			Long userID = employee.getUserId();
 			employee.setObjectID(userID);
@@ -72,8 +77,10 @@ public class EmployeeController extends Response {
 	}
 
 	@RequestMapping(value = "/employee/deleteemployee", method = RequestMethod.POST, produces = "application/json")
-	public @ResponseBody Response deleteEmployee(@RequestParam("employeeID") final Long employeeID) {
+	public @ResponseBody Response deleteEmployee(@RequestBody final Employee employee)
+	{
 		try {
+			Long employeeID = employee.getEmployeeId();
 			service.removeEmployee(employeeID);
 			return buildResponse("Employee deleted successfully");
 

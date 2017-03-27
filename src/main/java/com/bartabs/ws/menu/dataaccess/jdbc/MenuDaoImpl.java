@@ -132,6 +132,7 @@ public class MenuDaoImpl implements MenuDao
 				+ "FROM bartabs.menu_items mi "
 				+ "JOIN bartabs.menu m ON m.objectid = mi.menu_id "
 				+ "WHERE m.bar_id = :barID "
+				+ "  AND mi.deleted = false "
 				+ "GROUP BY category";
 		// @formatter:on
 
@@ -158,7 +159,8 @@ public class MenuDaoImpl implements MenuDao
 				+ "FROM bartabs.menu_items mi "
 				+ "JOIN bartabs.menu m ON m.objectid = mi.menu_id "
 				+ "WHERE m.bar_id = :barID "
-				+ "	AND mi.category = :category "
+				+ "  AND mi.deleted = false"
+				+ "	 AND mi.category = :category "
 				+ "GROUP BY type";
 		// @formatter:on
 

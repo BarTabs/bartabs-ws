@@ -7,6 +7,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -62,7 +63,7 @@ public class MenuController extends Response
 	}
 
 	@RequestMapping(value = "/menu/createmenu", method = RequestMethod.POST, produces = "application/json")
-	public @ResponseBody Response createMenu(final Menu menu)
+	public @ResponseBody Response createMenu(@RequestBody final Menu menu)
 	{
 		try {
 			Long menuID = service.createMenu(menu);
@@ -79,7 +80,7 @@ public class MenuController extends Response
 	}
 
 	@RequestMapping(value = "/menu/updatemenu", method = RequestMethod.POST, produces = "application/json")
-	public @ResponseBody Response updateMenu(final Menu menu)
+	public @ResponseBody Response updateMenu(@RequestBody final Menu menu)
 	{
 		try {
 			Menu updatedMenu;
@@ -97,9 +98,10 @@ public class MenuController extends Response
 	}
 
 	@RequestMapping(value = "/menu/deletemenu", method = RequestMethod.POST, produces = "application/json")
-	public @ResponseBody Response deleteMenu(@RequestParam("menuID") final Long menuID)
+	public @ResponseBody Response deleteMenu(@RequestBody final Menu menu)
 	{
 		try {
+			Long menuID = menu.getObjectID();
 			service.removeMenu(menuID);
 
 			return buildResponse("Ok");
@@ -140,7 +142,7 @@ public class MenuController extends Response
 	}
 
 	@RequestMapping(value = "/menu/createmenuitem", method = RequestMethod.POST, produces = "application/json")
-	public @ResponseBody Response createMenuItem(final MenuItem menuItem)
+	public @ResponseBody Response createMenuItem(@RequestBody final MenuItem menuItem)
 	{
 		try {
 			MenuItem newMenuItem = service.createMenuItem(menuItem);
@@ -154,7 +156,7 @@ public class MenuController extends Response
 	}
 
 	@RequestMapping(value = "/menu/updatemenuitem", method = RequestMethod.POST, produces = "application/json")
-	public @ResponseBody Response updateMenuItem(final MenuItem menuItem)
+	public @ResponseBody Response updateMenuItem(@RequestBody final MenuItem menuItem)
 	{
 		try {
 			MenuItem updatedMenuItem = service.updateMenuItem(menuItem);
@@ -168,9 +170,10 @@ public class MenuController extends Response
 	}
 
 	@RequestMapping(value = "/menu/deletemenuitem", method = RequestMethod.POST, produces = "application/json")
-	public @ResponseBody Response deleteMenuItem(@RequestParam("objectID") final Long objectID)
+	public @ResponseBody Response deleteMenuItem(@RequestBody final MenuItem menuItem)
 	{
 		try {
+			Long objectID = menuItem.getObjectID();
 			service.removeMenuItem(objectID);
 			return buildResponse("Ok");
 		} catch (Exception ex) {

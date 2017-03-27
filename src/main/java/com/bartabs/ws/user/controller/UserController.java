@@ -5,6 +5,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -55,7 +56,7 @@ public class UserController extends Response
 	}
 
 	@RequestMapping(value = "/user/createuser", method = RequestMethod.POST, produces = "application/json")
-	public @ResponseBody Response createUser(final User user)
+	public @ResponseBody Response createUser(@RequestBody final User user)
 	{
 		try {
 			Long userID = service.createUser(user);
@@ -74,7 +75,7 @@ public class UserController extends Response
 	}
 
 	@RequestMapping(value = "/user/updateuser", method = RequestMethod.POST, produces = "application/json")
-	public @ResponseBody Response updateUser(final User user)
+	public @ResponseBody Response updateUser(@RequestBody final User user)
 	{
 		try {
 			User updatedUser;
@@ -89,7 +90,7 @@ public class UserController extends Response
 	}
 
 	@RequestMapping(value = "/user/deleteuser", method = RequestMethod.POST, produces = "application/json")
-	public @ResponseBody Response deleteUser(final User user)
+	public @ResponseBody Response deleteUser(@RequestBody final User user)
 	{
 		service.removeUser(user);
 
