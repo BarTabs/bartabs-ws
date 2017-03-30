@@ -63,8 +63,8 @@ public class OrderDaoImpl implements OrderDao
 				+ "		o.first_name AS ordered_by_fname, o.last_name AS ordered_by_lname, "
 				+ "		o.username AS ordered_by_name "
 				+ "FROM bartabs.orders bo "
-				+ "JOIN bartabs.users c ON c.objectid = bo.completed_by "
-				+ "JOIN bartabs.users o ON o.objectid = bo.ordered_by "
+				+ "LEFT JOIN bartabs.user c ON c.objectid = bo.completed_by "
+				+ "LEFT JOIN bartabs.user o ON o.objectid = bo.ordered_by "
 				+ "WHERE bo.bar_id = :barID "
 				+ wc.toString()
 				+ "ORDER BY order_timestamp DESC";
@@ -132,14 +132,14 @@ public class OrderDaoImpl implements OrderDao
 
 		// @formatter:off
 		String sql = ""
-				+ "SELECT bo.objectid, bo.ordered_by, bo.order_timestamp, bo.complete, bo.completed_by, "
-				+ "		bo.completed_timestamp, bar_id c.first_name AS completed_by_fname, "
+				+ "SELECT bo.objectid, bo.bar_id, bo.ordered_by, bo.order_timestamp, bo.complete, bo.completed_by, "
+				+ "		bo.completed_timestamp, bar_id, c.first_name AS completed_by_fname, "
 				+ "		c.last_name AS completed_by_lname, c.username AS completed_by_uname, "
 				+ "		o.first_name AS ordered_by_fname, o.last_name AS ordered_by_lname, "
 				+ "		o.username AS ordered_by_name "
 				+ "FROM bartabs.orders bo "
-				+ "JOIN bartabs.users c ON c.objectid = bo.completed_by "
-				+ "JOIN bartabs.users o ON o.objectid = bo.ordered_by "
+				+ "LEFT JOIN bartabs.user c ON c.objectid = bo.completed_by "
+				+ "LEFT JOIN bartabs.user o ON o.objectid = bo.ordered_by "
 				+ "WHERE bo.ordered_by = :userID "
 				+ "ORDER BY order_timestamp DESC";
 		// @formatter:on
@@ -157,6 +157,7 @@ public class OrderDaoImpl implements OrderDao
 
 				Long orderID = rs.getLong("objectid");
 				row.setObjectID(orderID);
+				row.setBarID(rs.getLong("bar_id"));
 				row.setOrderedBy(rs.getLong("ordered_by"));
 				row.setOrderedDate(rs.getTimestamp("order_timestamp"));
 
@@ -211,8 +212,8 @@ public class OrderDaoImpl implements OrderDao
 				+ "		o.first_name AS ordered_by_fname, o.last_name AS ordered_by_lname, "
 				+ "		o.username AS ordered_by_name "
 				+ "FROM bartabs.orders bo "
-				+ "JOIN bartabs.users c ON c.objectid = bo.completed_by "
-				+ "JOIN bartabs.users o ON o.objectid = bo.ordered_by "
+				+ "LEFT JOIN bartabs.user c ON c.objectid = bo.completed_by "
+				+ "LEFT JOIN bartabs.user o ON o.objectid = bo.ordered_by "
 				+ "WHERE bo.objectid = :orderID ";
 		// @formatter:on
 
@@ -273,7 +274,7 @@ public class OrderDaoImpl implements OrderDao
 	{
 		// @formatter:off
 		String sql = ""
-				+ "SELECT mi.objectid, mi.menu_id, mi.name, mi.description, mi.price, mi.category, mi.type"
+				+ "SELECT mi.objectid, mi.menu_id, mi.name, mi.description, mi.price, mi.category, mi.type "
 				+ "FROM bartabs.order_items oi "
 				+ "JOIN bartabs.menu_items mi ON mi.objectid = oi.menu_item_id "
 				+ "WHERE oi.order_id = :orderID";
@@ -317,6 +318,25 @@ public class OrderDaoImpl implements OrderDao
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		params.addValue("orderID", orderID);
 		params.addValue("menuItemID", orderItem.getObjectID());
+
+		template.update(sql, params);
+
+	}
+
+	@Override
+	public void completeOrder(Order order)
+	{
+		// @formatter:off
+		String sql = ""
+				+ "UPDATE bartabs.order_items "
+				+ "SET 	completed = true "
+				+ "		completed_by = :completedBy "
+				+ "WHERE objectid = :objectID";
+		// @formatter:on
+
+		MapSqlParameterSource params = new MapSqlParameterSource();
+		params.addValue("objectID", order.getObjectID());
+		params.addValue("completedBy", order.getCompletedBy());
 
 		template.update(sql, params);
 

@@ -19,4 +19,6 @@ public interface OrderDao
 
 	public void linkOrderItem(Long orderID, MenuItem orderItem);
 
+	public void completeOrder(Order order);
+
 }

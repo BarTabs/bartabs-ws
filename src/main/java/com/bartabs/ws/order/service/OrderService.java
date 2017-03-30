@@ -49,4 +49,9 @@ public class OrderService
 		return order;
 	}
 
+	public void completeOrder(Order order)
+	{
+		dao.completeOrder(order);
+	}
+
 }

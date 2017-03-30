@@ -35,7 +35,7 @@ public class OrderController extends Response
 			return buildResponse(orders);
 		} catch (Exception ex) {
 			log.error(ex.toString(), ex);
-			return buildErrorResponse("Error getting orders.");
+			return buildErrorResponse("Error getting open orders.");
 		}
 	}
 
@@ -47,7 +47,7 @@ public class OrderController extends Response
 			return buildResponse(orders);
 		} catch (Exception ex) {
 			log.error(ex.toString(), ex);
-			return buildErrorResponse("Error getting orders.");
+			return buildErrorResponse("Error getting user orders.");
 		}
 	}
 
@@ -72,10 +72,23 @@ public class OrderController extends Response
 	{
 		try {
 			service.placeOrder(order);
-			return buildResponse("Thank you. Your order is being processed.");
+			return buildResponse("Thank you. Your order is being processed");
 		} catch (Exception ex) {
 			log.error(ex.toString(), ex);
-			return buildErrorResponse("Error processing order.");
+			return buildErrorResponse("Error processing order");
+		}
+	}
+
+	@RequestMapping(value = "/order/completeorder", method = RequestMethod.POST, produces = "application/json")
+	public @ResponseBody Response completeOrder(@RequestBody final Order order)
+	{
+		try {
+			service.completeOrder(order);
+
+			return buildResponse("Order complete");
+		} catch (Exception ex) {
+			log.error(ex.toString(), ex);
+			return buildErrorResponse("Error marking order as complete");
 		}
 	}
 

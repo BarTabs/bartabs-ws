@@ -25,7 +25,7 @@ public class NameFormatter
 
 	public static String format(String firstName, String lastName, boolean reverseCommaSeparated)
 	{
-		return format(firstName, lastName, reverseCommaSeparated);
+		return format(firstName, lastName, null, reverseCommaSeparated);
 	}
 
 	public static String format(String firstName, String lastName)
