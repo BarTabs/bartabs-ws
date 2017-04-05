@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.bartabs.ws.Response;
+import com.bartabs.ws.menu.model.MenuItem;
 import com.bartabs.ws.order.model.Order;
 import com.bartabs.ws.order.service.OrderService;
 
@@ -43,8 +44,8 @@ public class OrderController extends Response
 	public @ResponseBody Response getUserOrders(@RequestParam("userID") Long barID)
 	{
 		try {
-			List<Order> orders = service.getOrdersByUserID(barID);
-			return buildResponse(orders);
+			List<MenuItem> menuItems = service.getOrdersByUserID(barID);
+			return buildResponse(menuItems);
 		} catch (Exception ex) {
 			log.error(ex.toString(), ex);
 			return buildErrorResponse("Error getting user orders.");

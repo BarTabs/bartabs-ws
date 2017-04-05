@@ -37,10 +37,10 @@ public class OrderService
 		return orders;
 	}
 
-	public List<Order> getOrdersByUserID(Long userID)
+	public List<MenuItem> getOrdersByUserID(Long userID)
 	{
-		List<Order> orders = dao.getUserOrders(userID);
-		return orders;
+		List<MenuItem> menuItems = dao.getUserOrders(userID);
+		return menuItems;
 	}
 
 	public Order getOrderByOrderID(final Long orderID)

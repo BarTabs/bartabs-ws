@@ -11,7 +11,7 @@ public interface OrderDao
 
 	public List<Order> getBarOrders(Long barID, Boolean openOnly);
 
-	public List<Order> getUserOrders(Long userID);
+	public List<MenuItem> getUserOrders(Long userID);
 
 	public Order getOrder(Long orderID);
 

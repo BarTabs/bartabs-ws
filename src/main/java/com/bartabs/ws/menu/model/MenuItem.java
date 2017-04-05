@@ -6,8 +6,10 @@ import java.util.List;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
+import com.bartabs.ws.order.model.OrderInfo;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class MenuItem
+public class MenuItem extends OrderInfo
 {
 	private Long objectID;
 	private Long menuID;

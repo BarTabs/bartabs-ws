@@ -126,18 +126,21 @@ public class OrderDaoImpl implements OrderDao
 	}
 
 	@Override
-	public List<Order> getUserOrders(Long userID)
+	public List<MenuItem> getUserOrders(Long userID)
 	{
 		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss ");
 
 		// @formatter:off
 		String sql = ""
-				+ "SELECT bo.objectid, bo.bar_id, bo.ordered_by, bo.order_timestamp, bo.complete, bo.completed_by, "
-				+ "		bo.completed_timestamp, bar_id, c.first_name AS completed_by_fname, "
+				+ "SELECT  mi.objectid, mi.menu_id, mi.name, mi.description, mi.price, mi.category, mi.type,"
+				+ "		c.first_name AS completed_by_fname, "
 				+ "		c.last_name AS completed_by_lname, c.username AS completed_by_uname, "
 				+ "		o.first_name AS ordered_by_fname, o.last_name AS ordered_by_lname, "
-				+ "		o.username AS ordered_by_name "
-				+ "FROM bartabs.orders bo "
+				+ "		o.username AS ordered_by_name, oi.order_id, bo.bar_id, bo.ordered_by, bo.order_timestamp,"
+				+ "	    bo.complete, bo.completed_by " 
+				+ "FROM bartabs.order_items oi "
+				+ "JOIN bartabs.menu_items mi ON mi.objectid = oi.menu_item_id "
+				+ "JOIN bartabs.orders bo ON bo.objectid = oi.order_id " 
 				+ "LEFT JOIN bartabs.user c ON c.objectid = bo.completed_by "
 				+ "LEFT JOIN bartabs.user o ON o.objectid = bo.ordered_by "
 				+ "WHERE bo.ordered_by = :userID "
@@ -147,16 +150,23 @@ public class OrderDaoImpl implements OrderDao
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		params.addValue("userID", userID);
 
-		return template.query(sql, params, new RowMapper<Order>()
+		return template.query(sql, params, new RowMapper<MenuItem>()
 		{
 
 			@Override
-			public Order mapRow(ResultSet rs, int rowNum) throws SQLException
+			public MenuItem mapRow(ResultSet rs, int rowNum) throws SQLException
 			{
-				Order row = new Order();
+				MenuItem row = new MenuItem();
 
-				Long orderID = rs.getLong("objectid");
-				row.setObjectID(orderID);
+				Long menuItemID = rs.getLong("objectid");
+				row.setObjectID(menuItemID);
+				row.setMenuID(rs.getLong("menu_id"));
+				row.setName(rs.getString("name"));
+				row.setDescription(rs.getString("description"));
+				row.setPrice(rs.getBigDecimal("price"));
+				row.setCategory(rs.getString("category"));
+				row.setType(rs.getString("type"));
+				row.setOrderID(rs.getLong("order_id"));
 				row.setBarID(rs.getLong("bar_id"));
 				row.setOrderedBy(rs.getLong("ordered_by"));
 				row.setOrderedDate(rs.getTimestamp("order_timestamp"));
@@ -189,9 +199,6 @@ public class OrderDaoImpl implements OrderDao
 					String completedByUsername = rs.getString("completed_by_uname");
 					row.setCompletedByDisplay(completedByUsername);
 				}
-
-				List<MenuItem> orderItems = getOrderItems(orderID);
-				row.setOrderItems(orderItems);
 
 				return row;
 			}
