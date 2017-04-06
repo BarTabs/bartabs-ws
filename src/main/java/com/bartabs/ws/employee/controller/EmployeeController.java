@@ -18,8 +18,7 @@ import com.bartabs.ws.employee.model.Employee;
 import com.bartabs.ws.employee.service.EmployeeService;
 
 @Controller("Employee.EmployeeController")
-public class EmployeeController extends Response
-{
+public class EmployeeController extends Response {
 
 	private final Log log = LogFactory.getLog(this.getClass());
 
@@ -28,8 +27,7 @@ public class EmployeeController extends Response
 	private EmployeeService service;
 
 	@RequestMapping(value = "/employee/getemployees", method = RequestMethod.GET, produces = "application/json")
-	public @ResponseBody Response getEmployees(@RequestParam(value = "barID", required = false) Long barID)
-	{
+	public @ResponseBody Response getEmployees(@RequestParam(value = "barID", required = false) Long barID) {
 
 		try {
 			if (barID != null) {
@@ -49,20 +47,19 @@ public class EmployeeController extends Response
 	}
 
 	@RequestMapping(value = "/employee/createemployee", method = RequestMethod.POST, produces = "application/json")
-	public @ResponseBody Response createEmployee(@RequestBody final Employee employee)
-	{
+	public @ResponseBody Response createEmployee(@RequestBody final Employee employee) {
 		try {
 			Employee newEmployee = service.createEmployee(employee);
 
 			return buildResponse(newEmployee);
 		} catch (Exception ex) {
+			log.error(ex.toString(), ex);
 			return buildErrorResponse(ex.getMessage());
 		}
 	}
 
 	@RequestMapping(value = "/employee/updateemployee", method = RequestMethod.POST, produces = "application/json")
-	public @ResponseBody Response updateEmployee(@RequestBody final Employee employee)
-	{
+	public @ResponseBody Response updateEmployee(@RequestBody final Employee employee) {
 		try {
 			Long userID = employee.getUserId();
 			employee.setObjectID(userID);
@@ -71,16 +68,14 @@ public class EmployeeController extends Response
 			return buildResponse(updatedEmployee);
 
 		} catch (Exception e) {
-
 			return buildErrorResponse(e.getMessage());
 		}
 	}
 
 	@RequestMapping(value = "/employee/deleteemployee", method = RequestMethod.POST, produces = "application/json")
-	public @ResponseBody Response deleteEmployee(@RequestBody final Employee employee)
-	{
+	public @ResponseBody Response deleteEmployee(@RequestBody final Employee employee) {
 		try {
-			Long employeeID = employee.getEmployeeId();
+			final Long employeeID = employee.getEmployeeId();
 			service.removeEmployee(employeeID);
 			return buildResponse("Employee deleted successfully");
 

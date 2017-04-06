@@ -12,6 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.bartabs.ws.employee.dataaccess.EmployeeDao;
 import com.bartabs.ws.employee.model.Employee;
 import com.bartabs.ws.exceptions.DuplicateUserNameException;
+import com.bartabs.ws.exceptions.MissingUsernameException;
+import com.bartabs.ws.exceptions.PasswordMissingException;
 import com.bartabs.ws.exceptions.UserNotFoundException;
 import com.bartabs.ws.user.service.UserService;
 
@@ -30,8 +32,8 @@ public class EmployeeService {
 		return dao.getEmployeesByBarID(barID);
 	}
 
-	public Employee createEmployee(Employee employee)
-			throws NoSuchAlgorithmException, InvalidKeySpecException, DuplicateUserNameException {
+	public Employee createEmployee(Employee employee) throws NoSuchAlgorithmException, InvalidKeySpecException,
+			DuplicateUserNameException, PasswordMissingException, MissingUsernameException {
 		// Create user from employee model
 		Long userID = userService.createUser(employee);
 

@@ -1,7 +1,5 @@
 package com.bartabs.ws.user.dataaccess.jdbc;
 
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -19,7 +17,6 @@ import com.bartabs.ws.location.model.Location;
 import com.bartabs.ws.user.dataaccess.UserDao;
 import com.bartabs.ws.user.model.User;
 import com.bartabs.ws.util.NameFormatter;
-import com.bartabs.ws.util.PasswordHasher;
 
 @Repository("User.UserDao")
 public class UserDaoImpl implements UserDao {
@@ -149,8 +146,7 @@ public class UserDaoImpl implements UserDao {
 	}
 
 	@Override
-	public Long createUser(final User user)
-			throws NoSuchAlgorithmException, InvalidKeySpecException, DuplicateUserNameException {
+	public Long createUser(final User user) throws DuplicateUserNameException {
 		try {
 		// @formatter:off
 		String sql = "" 
@@ -171,10 +167,8 @@ public class UserDaoImpl implements UserDao {
 			params.addValue("locationID", locationID);
 			params.addValue("userType", user.getUserType());
 			params.addValue("username", user.getUsername());
-			final byte[] salt = PasswordHasher.getSalt();
-			final String hashedPassword = PasswordHasher.generateStrongPasswordHash(user.getPassword(), salt);
-			params.addValue("password", hashedPassword);
-			params.addValue("salt", salt);
+			params.addValue("password", user.getPassword());
+			params.addValue("salt", user.getSalt());
 
 			template.update(sql, params);
 
