@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.bartabs.ws.Response;
+import com.bartabs.ws.employee.model.Employee;
+import com.bartabs.ws.employee.service.EmployeeService;
 import com.bartabs.ws.menu.model.MenuItem;
 import com.bartabs.ws.order.model.Order;
 import com.bartabs.ws.order.service.OrderService;
@@ -26,6 +28,10 @@ public class OrderController extends Response
 	@Qualifier("Order.OrderService")
 	@Autowired
 	private OrderService service;
+
+	@Qualifier("Employee.EmployeeService")
+	@Autowired
+	private EmployeeService employeeService;
 
 	@RequestMapping(value = "/order/getbarorders", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody Response getOrders(@RequestParam("barID") Long barID,
@@ -53,13 +59,29 @@ public class OrderController extends Response
 	}
 
 	@RequestMapping(value = "/order/getorder", method = RequestMethod.GET, produces = "application/json")
-	public @ResponseBody Response getMenu(@RequestParam("orderID") Long orderID)
+	public @ResponseBody Response getOrder(@RequestParam("orderID") Long orderID)
 	{
 
 		try {
 
 			final Order order = service.getOrderByOrderID(orderID);
 			return buildResponse(order);
+
+		} catch (Exception ex) {
+			log.error(ex.toString(), ex);
+			return buildErrorResponse("Error retrieving order");
+		}
+
+	}
+
+	@RequestMapping(value = "/order/getorderitems", method = RequestMethod.GET, produces = "application/json")
+	public @ResponseBody Response getOrderItem(@RequestParam("orderID") Long orderID)
+	{
+
+		try {
+
+			final List<MenuItem> orderItems = service.getOrderItems(orderID);
+			return buildResponse(orderItems);
 
 		} catch (Exception ex) {
 			log.error(ex.toString(), ex);
@@ -84,6 +106,8 @@ public class OrderController extends Response
 	public @ResponseBody Response completeOrder(@RequestBody final Order order)
 	{
 		try {
+			Employee employee = employeeService.getEmployeeByUserID(order.getCompletedBy(), order.getBarID());
+			order.setCompletedBy(employee.getEmployeeId());
 			service.completeOrder(order);
 
 			return buildResponse("Order complete");

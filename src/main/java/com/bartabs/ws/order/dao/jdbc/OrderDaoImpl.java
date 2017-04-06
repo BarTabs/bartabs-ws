@@ -29,14 +29,15 @@ public class OrderDaoImpl implements OrderDao
 		// @formatter:off
 		String sql = ""
 				+ "INSERT INTO bartabs.orders "
-				+ "  (ordered_by, bar_id) "
+				+ "  (ordered_by, bar_id, total) "
 				+ " VALUES "
-				+ "  (:orderedBy, :barID)";
+				+ "  (:orderedBy, :barID, :total)";
 		// @formatter:on
 
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		params.addValue("orderedBy", order.getOrderedBy());
 		params.addValue("barID", order.getBarID());
+		params.addValue("total", order.getTotal());
 
 		template.update(sql, params);
 
@@ -58,10 +59,10 @@ public class OrderDaoImpl implements OrderDao
 		// @formatter:off
 		String sql = ""
 				+ "SELECT bo.objectid, bo.ordered_by, bo.order_timestamp, bo.complete, bo.completed_by, "
-				+ "		bo.completed_timestamp, bar_id c.first_name AS completed_by_fname, "
+				+ "		bo.completed_timestamp, bar_id, c.first_name AS completed_by_fname, "
 				+ "		c.last_name AS completed_by_lname, c.username AS completed_by_uname, "
 				+ "		o.first_name AS ordered_by_fname, o.last_name AS ordered_by_lname, "
-				+ "		o.username AS ordered_by_uname "
+				+ "		o.username AS ordered_by_uname, bo.total "
 				+ "FROM bartabs.orders bo "
 				+ "LEFT JOIN bartabs.user c ON c.objectid = bo.completed_by "
 				+ "LEFT JOIN bartabs.user o ON o.objectid = bo.ordered_by "
@@ -116,8 +117,7 @@ public class OrderDaoImpl implements OrderDao
 					row.setCompletedByDisplay(completedByUsername);
 				}
 
-				List<MenuItem> orderItems = getOrderItems(orderID);
-				row.setOrderItems(orderItems);
+				row.setTotal(rs.getBigDecimal("total"));
 
 				return row;
 			}
@@ -137,7 +137,7 @@ public class OrderDaoImpl implements OrderDao
 				+ "		c.last_name AS completed_by_lname, c.username AS completed_by_uname, "
 				+ "		o.first_name AS ordered_by_fname, o.last_name AS ordered_by_lname, "
 				+ "		o.username AS ordered_by_uname, oi.order_id, bo.bar_id, bo.ordered_by, bo.order_timestamp,"
-				+ "	    bo.complete, bo.completed_by " 
+				+ "	    bo.complete, bo.completed_by, bo.total " 
 				+ "FROM bartabs.order_items oi "
 				+ "JOIN bartabs.menu_items mi ON mi.objectid = oi.menu_item_id "
 				+ "JOIN bartabs.orders bo ON bo.objectid = oi.order_id " 
@@ -200,6 +200,8 @@ public class OrderDaoImpl implements OrderDao
 					row.setCompletedByDisplay(completedByUsername);
 				}
 
+				row.setTotal(rs.getBigDecimal("total"));
+
 				return row;
 			}
 
@@ -217,7 +219,7 @@ public class OrderDaoImpl implements OrderDao
 				+ "		bo.completed_timestamp, bar_id c.first_name AS completed_by_fname, "
 				+ "		c.last_name AS completed_by_lname, c.username AS completed_by_uname, "
 				+ "		o.first_name AS ordered_by_fname, o.last_name AS ordered_by_lname, "
-				+ "		o.username AS ordered_by_name "
+				+ "		o.username AS ordered_by_name, bo.total "
 				+ "FROM bartabs.orders bo "
 				+ "LEFT JOIN bartabs.user c ON c.objectid = bo.completed_by "
 				+ "LEFT JOIN bartabs.user o ON o.objectid = bo.ordered_by "
@@ -266,6 +268,8 @@ public class OrderDaoImpl implements OrderDao
 					String completedByUsername = rs.getString("completed_by_uname");
 					row.setCompletedByDisplay(completedByUsername);
 				}
+
+				row.setTotal(rs.getBigDecimal("total"));
 
 				List<MenuItem> orderItems = getOrderItems(orderID);
 				row.setOrderItems(orderItems);
@@ -335,8 +339,8 @@ public class OrderDaoImpl implements OrderDao
 	{
 		// @formatter:off
 		String sql = ""
-				+ "UPDATE bartabs.order_items "
-				+ "SET 	completed = true "
+				+ "UPDATE bartabs.orders "
+				+ "SET 	complete = true, "
 				+ "		completed_by = :completedBy "
 				+ "WHERE objectid = :objectID";
 		// @formatter:on

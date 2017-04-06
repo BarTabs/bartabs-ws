@@ -54,4 +54,9 @@ public class OrderService
 		dao.completeOrder(order);
 	}
 
+	public List<MenuItem> getOrderItems(Long orderID)
+	{
+		return dao.getOrderItems(orderID);
+	}
+
 }
