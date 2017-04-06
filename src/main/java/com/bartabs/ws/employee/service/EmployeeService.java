@@ -34,14 +34,9 @@ public class EmployeeService
 		return dao.getEmployeesByBarID(barID);
 	}
 
-<<<<<<< Updated upstream
 	public Employee createEmployee(Employee employee) throws NoSuchAlgorithmException, InvalidKeySpecException,
-			DuplicateUserNameException, PasswordMissingException, MissingUsernameException {
-=======
-	public Employee createEmployee(Employee employee)
-			throws NoSuchAlgorithmException, InvalidKeySpecException, DuplicateUserNameException
+			DuplicateUserNameException, PasswordMissingException, MissingUsernameException
 	{
->>>>>>> Stashed changes
 		// Create user from employee model
 		Long userID = userService.createUser(employee);
 
