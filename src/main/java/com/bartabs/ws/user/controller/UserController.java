@@ -1,5 +1,7 @@
 package com.bartabs.ws.user.controller;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.bartabs.ws.Response;
-import com.bartabs.ws.authenticate.service.AuthenticateService;
 import com.bartabs.ws.authenticate.service.TokenService;
 import com.bartabs.ws.exceptions.DuplicateUserNameException;
 import com.bartabs.ws.exceptions.UserNotFoundException;
@@ -30,10 +31,6 @@ public class UserController extends Response
 	private UserService service;
 
 	@Autowired
-	@Qualifier("Authenticate.AuthenticateService")
-	private AuthenticateService authenticateService;
-
-	@Autowired
 	@Qualifier("Authenticate.TokenService")
 	private TokenService tokenService;
 
@@ -44,13 +41,17 @@ public class UserController extends Response
 		try {
 			log.debug("Getting user: " + token);
 
-			User user = authenticateService.getUserByToken(token);
+			User user = service.getUserByToken(token);
 			return buildResponse(user);
 
 		} catch (UserNotFoundException ex) {
 			log.error(ex.toString(), ex);
 
-			return buildErrorResponse(ex.getMessage());
+			return buildErrorResponse("User not found.");
+		} catch (Exception ex) {
+			log.error(ex.toString(), ex);
+
+			return buildErrorResponse("Illegal authorization token. Please sign out and try again.");
 		}
 
 	}
@@ -93,7 +94,22 @@ public class UserController extends Response
 	public @ResponseBody Response deleteUser(@RequestBody final User user)
 	{
 		service.removeUser(user);
-
 		return buildResponse("Ok");
+	}
+
+	@RequestMapping(value = "/user/registerfornotifications", method = RequestMethod.GET, produces = "application/json")
+	public @ResponseBody Response registerForNotifications(HttpServletRequest request,
+			@RequestParam("fcmToken") String fcmToken)
+	{
+		try {
+			final String authToken = request.getHeader("authorization");
+			User user = service.getUserByToken(authToken);
+
+			service.registerForNotifications(user.getObjectID(), fcmToken);
+			return buildResponse("Successfully registered token");
+		} catch (Exception ex) {
+			log.error(ex.toString());
+			return buildErrorResponse("Error registering for notifications");
+		}
 	}
 }

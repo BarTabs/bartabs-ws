@@ -8,9 +8,11 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.bartabs.ws.authenticate.service.TokenService;
 import com.bartabs.ws.exceptions.DuplicateUserNameException;
 import com.bartabs.ws.exceptions.MissingUsernameException;
 import com.bartabs.ws.exceptions.PasswordMissingException;
+import com.bartabs.ws.exceptions.TokenDecodeException;
 import com.bartabs.ws.exceptions.UserNotFoundException;
 import com.bartabs.ws.location.model.Location;
 import com.bartabs.ws.location.service.LocationService;
@@ -18,9 +20,13 @@ import com.bartabs.ws.user.dataaccess.UserDao;
 import com.bartabs.ws.user.model.User;
 import com.bartabs.ws.util.PasswordHasher;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
+
 @Service("User.UserService")
 @Transactional("txManager")
-public class UserService {
+public class UserService
+{
 
 	@Qualifier("User.UserDao")
 	@Autowired
@@ -30,20 +36,40 @@ public class UserService {
 	@Autowired
 	private LocationService locationService;
 
-	public User getUserByID(final Long userID) throws UserNotFoundException {
+	@Qualifier("Authenticate.TokenService")
+	@Autowired
+	private TokenService tokenService;
+
+	public User getUserByID(final Long userID) throws UserNotFoundException
+	{
 		User user = dao.getUserByID(userID);
 
 		return user;
 	}
 
-	public User getUserByUserName(final String userName) throws UserNotFoundException {
+	public User getUserByUserName(final String userName) throws UserNotFoundException
+	{
 		User user = dao.getUserByUserName(userName);
 
 		return user;
 	}
 
+	public User getUserByToken(final String token) throws UserNotFoundException, TokenDecodeException
+	{
+		Jws<Claims> claims = tokenService.decodeToken(token);
+		String username = claims.getBody().getSubject();
+		User user = dao.getUserByUserName(username);
+
+		if (user == null) {
+			throw new UserNotFoundException();
+		}
+
+		return user;
+	}
+
 	public Long createUser(final User user) throws NoSuchAlgorithmException, InvalidKeySpecException,
-			DuplicateUserNameException, PasswordMissingException, MissingUsernameException {
+			DuplicateUserNameException, PasswordMissingException, MissingUsernameException
+	{
 		Long userID = null;
 		Location location = user.getLocation();
 
@@ -69,7 +95,8 @@ public class UserService {
 		return userID;
 	}
 
-	public User updateUser(final User user) throws UserNotFoundException {
+	public User updateUser(final User user) throws UserNotFoundException
+	{
 		Location location = user.getLocation();
 
 		if (location != null) {
@@ -82,8 +109,18 @@ public class UserService {
 		return updatedUser;
 	}
 
-	public void removeUser(final User user) {
+	public void removeUser(final User user)
+	{
 		dao.removeUser(user);
 	}
 
+	public void registerForNotifications(Long userID, String fcmToken)
+	{
+		dao.registerForFcmNotifications(userID, fcmToken);
+	}
+
+	public String retrieveFcmRegistrationToken(Long userID)
+	{
+		return dao.retrieveFcmRegistrationToken(userID);
+	}
 }

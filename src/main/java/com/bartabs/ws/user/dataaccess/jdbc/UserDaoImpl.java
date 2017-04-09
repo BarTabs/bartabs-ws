@@ -19,12 +19,14 @@ import com.bartabs.ws.user.model.User;
 import com.bartabs.ws.util.NameFormatter;
 
 @Repository("User.UserDao")
-public class UserDaoImpl implements UserDao {
+public class UserDaoImpl implements UserDao
+{
 	@Autowired
 	NamedParameterJdbcTemplate template;
 
 	@Override
-	public User getUserByID(final Long objectID) throws UserNotFoundException {
+	public User getUserByID(final Long objectID) throws UserNotFoundException
+	{
 		try {
 			// @formatter:off
 			String sql = ""
@@ -36,10 +38,12 @@ public class UserDaoImpl implements UserDao {
 				+ "WHERE u.objectid = :objectID ";
 			// @formatter:on
 
-			return template.queryForObject(sql, new MapSqlParameterSource("objectID", objectID), new RowMapper<User>() {
+			return template.queryForObject(sql, new MapSqlParameterSource("objectID", objectID), new RowMapper<User>()
+			{
 
 				@Override
-				public User mapRow(ResultSet rs, int arg1) throws SQLException {
+				public User mapRow(ResultSet rs, int arg1) throws SQLException
+				{
 					User user = new User();
 					user.setObjectID(rs.getLong("objectid"));
 
@@ -85,7 +89,8 @@ public class UserDaoImpl implements UserDao {
 	}
 
 	@Override
-	public User getUserByUserName(final String username) throws UserNotFoundException {
+	public User getUserByUserName(final String username) throws UserNotFoundException
+	{
 		try {
 		// @formatter:off
 		String sql = ""
@@ -97,10 +102,12 @@ public class UserDaoImpl implements UserDao {
 			+ "WHERE username = :username";
 		// @formatter:on
 
-			return template.queryForObject(sql, new MapSqlParameterSource("username", username), new RowMapper<User>() {
+			return template.queryForObject(sql, new MapSqlParameterSource("username", username), new RowMapper<User>()
+			{
 
 				@Override
-				public User mapRow(ResultSet rs, int arg1) throws SQLException {
+				public User mapRow(ResultSet rs, int arg1) throws SQLException
+				{
 					User user = new User();
 					user.setObjectID(rs.getLong("objectid"));
 
@@ -146,7 +153,8 @@ public class UserDaoImpl implements UserDao {
 	}
 
 	@Override
-	public Long createUser(final User user) throws DuplicateUserNameException {
+	public Long createUser(final User user) throws DuplicateUserNameException
+	{
 		try {
 		// @formatter:off
 		String sql = "" 
@@ -181,7 +189,8 @@ public class UserDaoImpl implements UserDao {
 	}
 
 	@Override
-	public void updateUser(final User user) {
+	public void updateUser(final User user)
+	{
 		// @formatter:off
 		String sql = ""
 			+ "UPDATE bartabs.user "
@@ -206,7 +215,8 @@ public class UserDaoImpl implements UserDao {
 	}
 
 	@Override
-	public void removeUser(final User user) {
+	public void removeUser(final User user)
+	{
 		// @formatter:off
 		String sql = ""
 			+ "UPDATE bartabs.user "
@@ -216,6 +226,39 @@ public class UserDaoImpl implements UserDao {
 		// @formatter:on
 
 		template.update(sql, new MapSqlParameterSource("objectID", user.getObjectID()));
+	}
+
+	@Override
+	public void registerForFcmNotifications(final Long userID, final String fcmToken)
+	{
+		// @formatter:off
+		String sql = ""
+			+ "UPDATE bartabs.user "
+			+ "SET 	fcm_token = :fcmToken "
+			+ "WHERE objectid = :objectID ";
+		// @formatter:on
+
+		MapSqlParameterSource params = new MapSqlParameterSource();
+		params.addValue("objectID", userID);
+		params.addValue("fcmToken", fcmToken);
+
+		template.update(sql, params);
+	}
+
+	@Override
+	public String retrieveFcmRegistrationToken(Long userID)
+	{
+		// @formatter:off
+		String sql = ""
+			+ "SELECT fcm_token "
+			+ "FROM bartabs.user "
+			+ "WHERE objectid = :objectID ";
+		// @formatter:on
+
+		MapSqlParameterSource params = new MapSqlParameterSource();
+		params.addValue("objectID", userID);
+
+		return template.queryForObject(sql, params, String.class);
 	}
 
 }

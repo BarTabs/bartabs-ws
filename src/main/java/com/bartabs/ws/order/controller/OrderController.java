@@ -2,6 +2,8 @@ package com.bartabs.ws.order.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -103,7 +105,7 @@ public class OrderController extends Response
 	}
 
 	@RequestMapping(value = "/order/completeorder", method = RequestMethod.POST, produces = "application/json")
-	public @ResponseBody Response completeOrder(@RequestBody final Order order)
+	public @ResponseBody Response completeOrder(HttpServletRequest request, @RequestBody final Order order)
 	{
 		try {
 			Employee employee = employeeService.getEmployeeByUserID(order.getCompletedBy(), order.getBarID());

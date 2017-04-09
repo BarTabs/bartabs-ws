@@ -4,7 +4,8 @@ import com.bartabs.ws.exceptions.DuplicateUserNameException;
 import com.bartabs.ws.exceptions.UserNotFoundException;
 import com.bartabs.ws.user.model.User;
 
-public interface UserDao {
+public interface UserDao
+{
 
 	public User getUserByID(Long objectID) throws UserNotFoundException;
 
@@ -15,5 +16,9 @@ public interface UserDao {
 	public void updateUser(User user);
 
 	public void removeUser(User user);
+
+	public void registerForFcmNotifications(Long userID, String fcmToken);
+
+	public String retrieveFcmRegistrationToken(Long userID);
 
 }

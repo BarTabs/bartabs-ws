@@ -216,10 +216,10 @@ public class OrderDaoImpl implements OrderDao
 		// @formatter:off
 		String sql = ""
 				+ "SELECT bo.objectid, bo.ordered_by, bo.order_timestamp, bo.complete, bo.completed_by, "
-				+ "		bo.completed_timestamp, bar_id c.first_name AS completed_by_fname, "
+				+ "		bo.completed_timestamp, bar_id, c.first_name AS completed_by_fname, "
 				+ "		c.last_name AS completed_by_lname, c.username AS completed_by_uname, "
 				+ "		o.first_name AS ordered_by_fname, o.last_name AS ordered_by_lname, "
-				+ "		o.username AS ordered_by_name, bo.total "
+				+ "		o.username AS ordered_by_uname, bo.total "
 				+ "FROM bartabs.orders bo "
 				+ "LEFT JOIN bartabs.user c ON c.objectid = bo.completed_by "
 				+ "LEFT JOIN bartabs.user o ON o.objectid = bo.ordered_by "
@@ -227,7 +227,7 @@ public class OrderDaoImpl implements OrderDao
 		// @formatter:on
 
 		MapSqlParameterSource params = new MapSqlParameterSource();
-		params.addValue("objectID", orderID);
+		params.addValue("orderID", orderID);
 
 		return template.queryForObject(sql, params, new RowMapper<Order>()
 		{

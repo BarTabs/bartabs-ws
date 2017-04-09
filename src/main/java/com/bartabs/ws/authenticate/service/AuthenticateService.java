@@ -50,15 +50,4 @@ public class AuthenticateService
 		}
 	}
 
-	public User getUserByToken(final String token) throws UserNotFoundException
-	{
-		User user = authenticateDao.getUserByToken(token);
-
-		if (user == null) {
-			throw new UserNotFoundException();
-		}
-
-		return user;
-	}
-
 }
