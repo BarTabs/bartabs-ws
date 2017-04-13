@@ -92,15 +92,15 @@ public class UserDaoImpl implements UserDao
 	public User getUserByUserName(final String username) throws UserNotFoundException
 	{
 		try {
-		// @formatter:off
-		String sql = ""
-			+ "SELECT u.objectid, u.first_name, u.last_name, u.middle_initial, u.phone_number, u.location_id, "
-			+ "		u.user_type, u.username, u.password, u.salt, l.objectid AS location_id, l.address1, l.address2, "
-			+ "		l.city, l.state, l.zip_code, l.geo_area_id "
-			+ "FROM bartabs.user u "
-			+ "LEFT JOIN bartabs.location l ON l.objectid = u.location_id "
-			+ "WHERE username = :username";
-		// @formatter:on
+			// @formatter:off
+			String sql = ""
+				+ "SELECT u.objectid, u.first_name, u.last_name, u.middle_initial, u.phone_number, u.location_id, "
+				+ "		u.user_type, u.username, u.password, u.salt, l.objectid AS location_id, l.address1, l.address2, "
+				+ "		l.city, l.state, l.zip_code, l.geo_area_id "
+				+ "FROM bartabs.user u "
+				+ "LEFT JOIN bartabs.location l ON l.objectid = u.location_id "
+				+ "WHERE username = :username";
+			// @formatter:on
 
 			return template.queryForObject(sql, new MapSqlParameterSource("username", username), new RowMapper<User>()
 			{
@@ -156,15 +156,15 @@ public class UserDaoImpl implements UserDao
 	public Long createUser(final User user) throws DuplicateUserNameException
 	{
 		try {
-		// @formatter:off
-		String sql = "" 
-			+ "INSERT INTO bartabs.user "
-			+ "    (first_name, last_name, middle_initial, phone_number, location_id, user_type, "
-			+ "     username, password, salt, created_timestamp, modified_timestamp) " 
-			+ "VALUES "
-			+ "    (:firstName, :lastName, :middleInitial, :phoneNumber, :locationID, :userType, "
-			+ "     :username, :password, :salt, now(), now()) ";
-		// @formatter:on
+			// @formatter:off
+			String sql = "" 
+				+ "INSERT INTO bartabs.user "
+				+ "    (first_name, last_name, middle_initial, phone_number, location_id, user_type, "
+				+ "     username, password, salt, created_timestamp, modified_timestamp) " 
+				+ "VALUES "
+				+ "    (:firstName, :lastName, :middleInitial, :phoneNumber, :locationID, :userType, "
+				+ "     :username, :password, :salt, now(), now()) ";
+			// @formatter:on
 
 			MapSqlParameterSource params = new MapSqlParameterSource();
 			params.addValue("firstName", user.getFirstName());
@@ -259,6 +259,51 @@ public class UserDaoImpl implements UserDao
 		params.addValue("objectID", userID);
 
 		return template.queryForObject(sql, params, String.class);
+	}
+
+	@Override
+	public String refreshUuid(Long userID)
+	{
+		// @formatter:off
+		String sql = ""
+			+ "UPDATE bartabs.user "
+			+ "SET 	uuid = uuid() "
+			+ "WHERE objectid = :objectID ";
+		// @formatter:on
+
+		MapSqlParameterSource params = new MapSqlParameterSource();
+		params.addValue("objectID", userID);
+		template.update(sql, params);
+
+		// @formatter:off
+		String query = ""
+				+ "SELECT uuid "
+				+ "FROM bartabs.user "
+				+ "WHERE objectid = :objectID";
+		// @formatter:on
+
+		return template.queryForObject(query, params, String.class);
+	}
+
+	@Override
+	public User getUserFromUuid(String uuid)
+	{
+		try {
+			// @formatter:off
+			String sql = ""
+					+ "SELECT objectid "
+					+ "FROM bartabs.user "
+					+ "WHERE uuid = :uuid";
+			// @formatter:on
+
+			MapSqlParameterSource params = new MapSqlParameterSource();
+			params.addValue("uuid", uuid);
+			Long userID = template.queryForObject(sql, params, Long.class);
+
+			return getUserByID(userID);
+		} catch (Exception ex) {
+			return null;
+		}
 	}
 
 }

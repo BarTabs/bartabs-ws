@@ -40,6 +40,10 @@ public class AuthenticateService
 				user.setAuthenticated(true);
 				user.setPassword(null);
 				user.setSalt(null);
+
+				String uuid = userService.refreshUuid(user.getObjectID());
+				user.setUuid(uuid);
+
 				return user;
 			} else {
 				throw new InvalidPasswordException();

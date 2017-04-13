@@ -123,4 +123,9 @@ public class UserService
 	{
 		return dao.retrieveFcmRegistrationToken(userID);
 	}
+
+	public String refreshUuid(Long userID)
+	{
+		return dao.refreshUuid(userID);
+	}
 }

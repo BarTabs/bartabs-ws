@@ -65,6 +65,9 @@ public class UserController extends Response
 			final String token = tokenService.encodeToken(newUser.getUsername());
 			newUser.setToken(token);
 
+			final String uuid = service.refreshUuid(userID);
+			newUser.setUuid(uuid);
+
 			return buildResponse(newUser);
 		} catch (DuplicateUserNameException ex) {
 			return buildErrorResponse(ex.getMessage());

@@ -21,4 +21,8 @@ public interface UserDao
 
 	public String retrieveFcmRegistrationToken(Long userID);
 
+	public String refreshUuid(Long userID);
+
+	public User getUserFromUuid(String uuid);
+
 }

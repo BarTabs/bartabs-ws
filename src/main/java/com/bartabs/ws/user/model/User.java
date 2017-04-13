@@ -23,6 +23,8 @@ public class User
 	private Date modifiedTimestamp;
 	private Boolean authenticated = false;
 	private String token;
+	private String uuid;
+	private byte[] qrCodeImageData;
 
 	private Location location;
 
@@ -164,6 +166,26 @@ public class User
 	public void setToken(String token)
 	{
 		this.token = token;
+	}
+
+	public String getUuid()
+	{
+		return uuid;
+	}
+
+	public void setUuid(String uuid)
+	{
+		this.uuid = uuid;
+	}
+
+	public byte[] getQrCodeImageData()
+	{
+		return qrCodeImageData;
+	}
+
+	public void setQrCodeImageData(byte[] qrCodeImageData)
+	{
+		this.qrCodeImageData = qrCodeImageData;
 	}
 
 	public Location getLocation()
