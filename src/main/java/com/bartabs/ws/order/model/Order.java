@@ -10,6 +10,7 @@ import com.bartabs.ws.menu.model.MenuItem;
 public class Order extends OrderInfo
 {
 	private Long objectID;
+	private String uuid;
 	private List<MenuItem> orderItems;
 
 	public Long getObjectID()
@@ -20,6 +21,16 @@ public class Order extends OrderInfo
 	public void setObjectID(Long objectID)
 	{
 		this.objectID = objectID;
+	}
+
+	public String getUuid()
+	{
+		return uuid;
+	}
+
+	public void setUuid(String uuid)
+	{
+		this.uuid = uuid;
 	}
 
 	public List<MenuItem> getOrderItems()

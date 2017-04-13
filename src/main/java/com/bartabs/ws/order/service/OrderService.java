@@ -49,6 +49,17 @@ public class OrderService
 		}
 	}
 
+	public void placeOrderViaQrCode(Order order) throws UserNotFoundException
+	{
+		String uuid = order.getUuid();
+		if (uuid != null && !uuid.isEmpty()) {
+			User user = userService.getUserFromUuid(uuid);
+			order.setOrderedBy(user.getObjectID());
+			placeOrder(order);
+		}
+
+	}
+
 	public List<Order> getOrdersByBarID(final Long barID, final Boolean openOnly)
 	{
 		List<Order> orders = dao.getBarOrders(barID, openOnly);

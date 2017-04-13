@@ -93,10 +93,22 @@ public class OrderController extends Response
 	}
 
 	@RequestMapping(value = "/order/placeorder", method = RequestMethod.POST, produces = "application/json")
-	public @ResponseBody Response updateMenuItem(@RequestBody final Order order)
+	public @ResponseBody Response placeOrder(@RequestBody final Order order)
 	{
 		try {
 			service.placeOrder(order);
+			return buildResponse("Thank you. Your order is being processed");
+		} catch (Exception ex) {
+			log.error(ex.toString(), ex);
+			return buildErrorResponse("Error processing order");
+		}
+	}
+
+	@RequestMapping(value = "/order/placeorderviaqrcode", method = RequestMethod.POST, produces = "application/json")
+	public @ResponseBody Response placeOrderViaQRCode(@RequestBody final Order order)
+	{
+		try {
+			service.placeOrderViaQrCode(order);
 			return buildResponse("Thank you. Your order is being processed");
 		} catch (Exception ex) {
 			log.error(ex.toString(), ex);

@@ -42,9 +42,13 @@ public class UserService
 
 	public User getUserByID(final Long userID) throws UserNotFoundException
 	{
-		User user = dao.getUserByID(userID);
+		if (userID != null) {
+			User user = dao.getUserByID(userID);
 
-		return user;
+			return user;
+		} else {
+			throw new UserNotFoundException("No user ID provided.");
+		}
 	}
 
 	public User getUserByUserName(final String userName) throws UserNotFoundException
@@ -127,5 +131,11 @@ public class UserService
 	public String refreshUuid(Long userID)
 	{
 		return dao.refreshUuid(userID);
+	}
+
+	public User getUserFromUuid(String uuid) throws UserNotFoundException
+	{
+		User user = dao.getUserFromUuid(uuid);
+		return user;
 	}
 }
