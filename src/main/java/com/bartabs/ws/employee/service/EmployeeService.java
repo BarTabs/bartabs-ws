@@ -19,8 +19,7 @@ import com.bartabs.ws.user.service.UserService;
 
 @Service("Employee.EmployeeService")
 @Transactional("txManager")
-public class EmployeeService
-{
+public class EmployeeService {
 	@Qualifier("Employee.EmployeeDao")
 	@Autowired
 	private EmployeeDao dao;
@@ -29,14 +28,12 @@ public class EmployeeService
 	@Autowired
 	private UserService userService;
 
-	public List<Employee> getEmployeesByBarID(Long barID)
-	{
+	public List<Employee> getEmployeesByBarID(Long barID) {
 		return dao.getEmployeesByBarID(barID);
 	}
 
 	public Employee createEmployee(Employee employee) throws NoSuchAlgorithmException, InvalidKeySpecException,
-			DuplicateUserNameException, PasswordMissingException, MissingUsernameException
-	{
+			DuplicateUserNameException, PasswordMissingException, MissingUsernameException {
 		// Create user from employee model
 		Long userID = userService.createUser(employee);
 
@@ -49,8 +46,10 @@ public class EmployeeService
 		return newEmployee;
 	}
 
-	public Employee updateEmployee(Employee employee) throws UserNotFoundException
-	{
+	public Employee updateEmployee(Employee employee) throws UserNotFoundException {
+		if (employee.getUserId() == null) {
+			return null;
+		}
 
 		employee.setObjectID(employee.getUserId());
 		userService.updateUser(employee);
@@ -60,19 +59,16 @@ public class EmployeeService
 
 	}
 
-	public void removeEmployee(Long employeeID) throws UserNotFoundException
-	{
+	public void removeEmployee(Long employeeID) throws UserNotFoundException {
 		Employee employee = getEmployeeByID(employeeID);
 		userService.removeUser(employee);
 	}
 
-	public Employee getEmployeeByUserID(Long userID, Long barID)
-	{
+	public Employee getEmployeeByUserID(Long userID, Long barID) {
 		return dao.getEmployeeByUserID(userID, barID);
 	}
 
-	public Employee getEmployeeByID(Long employeeID)
-	{
+	public Employee getEmployeeByID(Long employeeID) {
 		return dao.getEmployeeByID(employeeID);
 	}
 

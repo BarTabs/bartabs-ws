@@ -65,7 +65,11 @@ public class EmployeeController extends Response {
 			employee.setObjectID(userID);
 
 			Employee updatedEmployee = service.updateEmployee(employee);
-			return buildResponse(updatedEmployee);
+			if (updatedEmployee != null) {
+				return buildResponse(updatedEmployee);
+			} else {
+				return buildErrorResponse("No user ID provided with the request. Contact IT.");
+			}
 
 		} catch (Exception e) {
 			return buildErrorResponse(e.getMessage());
