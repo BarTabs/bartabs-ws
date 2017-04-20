@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2017, Ron Gerschel, Jon Goldberg and Victor Lora. All rights reserved.
+ * Ron Gerschel, Jon Goldberg and Victor Lora PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+ *
+ */
+
 package com.bartabs.ws.util;
 
 import java.math.BigInteger;
@@ -8,8 +14,28 @@ import java.security.spec.InvalidKeySpecException;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 
+/**
+ * The {@code PasswordHasher} class implements a password hasher using the
+ * java.security, java.math and javax.crypto packages
+ *
+ * @author Victor A. Lora
+ * @version 1.0
+ * @since 2017-04-16
+ */
 public class PasswordHasher
 {
+	/**
+	 * Produces a hashed password using PBKDF2WithHmacSHA1
+	 * 
+	 * @param password
+	 *            a plain text password {@code String}
+	 * @param salt
+	 *            a byte array to serve as the salt for the password. Use
+	 *            {@code getSalt()} to generate a new salt array.
+	 * @return a hashed password
+	 * @throws NoSuchAlgorithmException
+	 * @throws InvalidKeySpecException
+	 */
 	public static String generateStrongPasswordHash(String password, byte[] salt)
 			throws NoSuchAlgorithmException, InvalidKeySpecException
 	{
@@ -26,6 +52,13 @@ public class PasswordHasher
 		return iterations + ":" + toHex(salt) + ":" + toHex(hash);
 	}
 
+	/**
+	 * Produces a byte array to be used as the salt for {@code
+	 * generateStrongPasswordHash()}
+	 * 
+	 * @return a byte array used for the salt
+	 * @throws NoSuchAlgorithmException
+	 */
 	public static byte[] getSalt() throws NoSuchAlgorithmException
 	{
 		SecureRandom sr = SecureRandom.getInstance("SHA1PRNG");
@@ -34,6 +67,14 @@ public class PasswordHasher
 		return salt;
 	}
 
+	/**
+	 * Converts a byte array into hex
+	 * 
+	 * @param array
+	 *            a byte array
+	 * @return a hex representation of the given byte array
+	 * @throws NoSuchAlgorithmException
+	 */
 	private static String toHex(byte[] array) throws NoSuchAlgorithmException
 	{
 		BigInteger bi = new BigInteger(1, array);

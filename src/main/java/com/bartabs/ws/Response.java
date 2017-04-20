@@ -1,5 +1,18 @@
+/*
+ * Copyright (c) 2017, Ron Gerschel, Jon Goldberg and Victor Lora. All rights reserved.
+ * Ron Gerschel, Jon Goldberg and Victor Lora PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+ *
+ */
 package com.bartabs.ws;
 
+/**
+ * The {@code Response} class produces a model for the JSON formatted response.
+ * 
+ * @author Victor A. Lora
+ * @version 1.0
+ * @see 2017-04-12
+ *
+ */
 public class Response
 {
 	private int status;

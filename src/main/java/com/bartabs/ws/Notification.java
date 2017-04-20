@@ -3,7 +3,7 @@ package com.bartabs.ws;
 public class Notification
 {
 	private String targetDeviceID;
-	private String title;
+	private String title = "Notification";
 	private String body;
 	private String priority = "high";
 	private String sound = "default";
@@ -18,6 +18,11 @@ public class Notification
 		this.targetDeviceID = targetDeviceID;
 	}
 
+	/**
+	 * Returns the notification title
+	 * 
+	 * @return the notification title. Default is "Notification"
+	 */
 	public String getTitle()
 	{
 		return title;

@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2017, Ron Gerschel, Jon Goldberg and Victor Lora. All rights reserved.
+ * Ron Gerschel, Jon Goldberg and Victor Lora PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+ *
+ */
 package com.bartabs.ws.util;
 
 import java.awt.Color;
@@ -17,8 +22,24 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
+/**
+ * The {@code QRCodeGenerator} class uses Google's {@code zxing} library to
+ * generate a QR Code
+ * 
+ * @author Victor A. Lora
+ * @version 1.0
+ * @since 2017-04-12
+ *
+ */
 public class QRCodeGenerator
 {
+	/**
+	 * Generates a QR Code from the given content
+	 * 
+	 * @param content
+	 *            a {@code String} with the content desired in the QR Code
+	 * @return a byte array containing the QR Code image
+	 */
 	public static byte[] generateQRCode(final String content)
 	{
 		byte[] data = null;
@@ -56,8 +77,10 @@ public class QRCodeGenerator
 				}
 			}
 
+			// Write the image to the byte array
 			ImageIO.write(image, fileType, out);
 
+			// Set the byte array to the data variable
 			data = out.toByteArray();
 
 		} catch (WriterException e) {
@@ -65,8 +88,6 @@ public class QRCodeGenerator
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
-		System.out.println("\n\nYou have successfully created QR Code.");
 
 		return data;
 	}
