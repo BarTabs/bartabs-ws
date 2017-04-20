@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2017, Ron Gerschel, Jon Goldberg and Victor Lora. All rights reserved.
+ * Ron Gerschel, Jon Goldberg and Victor Lora PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+ *
+ */
 package com.bartabs.ws.authenticate.service;
 
 import java.util.Date;
@@ -14,6 +19,16 @@ import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
+/**
+ * The {@code TokenService} class provides the methods necessary to encode and
+ * decode JWT tokens
+ * 
+ * @author Victor Lora
+ * @version 1.0
+ * @see com.bartabs.ws.authenticate.configuration.model.TokenParams
+ * @since 2017-04-12
+ *
+ */
 @Service("Authenticate.TokenService")
 public class TokenService
 {
@@ -21,6 +36,16 @@ public class TokenService
 	@Autowired
 	private TokenParams tokenParams;
 
+	/**
+	 * Encodes a string into a token using the JSON Web Token library
+	 * 
+	 * @param subject
+	 *            a {@code String} containing the information to be converted
+	 *            into a token
+	 * @return a token
+	 * @throws TokenEncodeException
+	 *             thrown when token encoding fails
+	 */
 	public String encodeToken(final String subject) throws TokenEncodeException
 	{
 		try {
@@ -36,6 +61,16 @@ public class TokenService
 		}
 	}
 
+	/**
+	 * Decodes a token and returns the {@code Jws<Claims>} values
+	 * 
+	 * @param token
+	 *            a JWT token
+	 * @return {@code Jws<Claims> values}
+	 * @throws TokenDecodeException
+	 *             thrown when the token provided is invalid or a fault occurs
+	 *             during decoding
+	 */
 	public Jws<Claims> decodeToken(String token) throws TokenDecodeException
 	{
 		try {

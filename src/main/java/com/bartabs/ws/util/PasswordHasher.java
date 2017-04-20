@@ -34,7 +34,10 @@ public class PasswordHasher
 	 *            {@code getSalt()} to generate a new salt array.
 	 * @return a hashed password
 	 * @throws NoSuchAlgorithmException
+	 *             thrown when the algorithm specified by the JWT token does not
+	 *             exist
 	 * @throws InvalidKeySpecException
+	 *             thrown when an invalid JWT token is provided
 	 */
 	public static String generateStrongPasswordHash(String password, byte[] salt)
 			throws NoSuchAlgorithmException, InvalidKeySpecException
@@ -58,6 +61,8 @@ public class PasswordHasher
 	 * 
 	 * @return a byte array used for the salt
 	 * @throws NoSuchAlgorithmException
+	 *             thrown when the algorithm specified by the JWT token does not
+	 *             exist
 	 */
 	public static byte[] getSalt() throws NoSuchAlgorithmException
 	{
@@ -74,6 +79,8 @@ public class PasswordHasher
 	 *            a byte array
 	 * @return a hex representation of the given byte array
 	 * @throws NoSuchAlgorithmException
+	 *             thrown when the algorithm specified by the JWT token does not
+	 *             exist
 	 */
 	private static String toHex(byte[] array) throws NoSuchAlgorithmException
 	{

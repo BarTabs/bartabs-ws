@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2017, Ron Gerschel, Jon Goldberg and Victor Lora. All rights reserved.
+ * Ron Gerschel, Jon Goldberg and Victor Lora PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+ *
+ */
 package com.bartabs.ws.menu.model;
 
 import java.util.Date;

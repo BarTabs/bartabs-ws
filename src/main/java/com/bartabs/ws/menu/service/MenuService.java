@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2017, Ron Gerschel, Jon Goldberg and Victor Lora. All rights reserved.
+ * Ron Gerschel, Jon Goldberg and Victor Lora PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+ *
+ */
 package com.bartabs.ws.menu.service;
 
 import java.security.NoSuchAlgorithmException;
@@ -16,6 +21,16 @@ import com.bartabs.ws.menu.dataaccess.MenuDao;
 import com.bartabs.ws.menu.model.Menu;
 import com.bartabs.ws.menu.model.MenuItem;
 
+/**
+ * The {@code MenuService} class provides the methods necessary to access and
+ * edit the various parts of a bar menu
+ * 
+ * @author Victor Lora
+ * @version 1.0
+ * @see com.bartabs.ws.menu.dataaccess.MenuDao
+ * @since 2014-04-12
+ *
+ */
 @Service("Menu.MenuService")
 @Transactional("txManager")
 public class MenuService
@@ -25,6 +40,7 @@ public class MenuService
 	@Autowired
 	private MenuDao dao;
 
+	// TODO: Integrate location support
 	@Qualifier("Location.LocationService")
 	@Autowired
 	private LocationService locationService;

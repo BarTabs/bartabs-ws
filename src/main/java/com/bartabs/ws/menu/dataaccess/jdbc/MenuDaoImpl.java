@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2017, Ron Gerschel, Jon Goldberg and Victor Lora. All rights reserved.
+ * Ron Gerschel, Jon Goldberg and Victor Lora PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+ *
+ */
 package com.bartabs.ws.menu.dataaccess.jdbc;
 
 import java.sql.ResultSet;
@@ -139,15 +144,7 @@ public class MenuDaoImpl implements MenuDao
 		final MapSqlParameterSource params = new MapSqlParameterSource();
 		params.addValue("barID", criteria.getBarID());
 
-		return template.query(sql, params, new RowMapper<String>()
-		{
-
-			@Override
-			public String mapRow(ResultSet rs, int rowNum) throws SQLException
-			{
-				return rs.getString("category");
-			}
-		});
+		return template.queryForList(sql, params, String.class);
 	}
 
 	@Override
@@ -168,15 +165,7 @@ public class MenuDaoImpl implements MenuDao
 		params.addValue("barID", criteria.getBarID());
 		params.addValue("category", criteria.getCategory());
 
-		return template.query(sql, params, new RowMapper<String>()
-		{
-
-			@Override
-			public String mapRow(ResultSet rs, int rowNum) throws SQLException
-			{
-				return rs.getString("type");
-			}
-		});
+		return template.queryForList(sql, params, String.class);
 	}
 
 	@Override

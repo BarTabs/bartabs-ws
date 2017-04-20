@@ -7,10 +7,19 @@ package com.bartabs.ws;
 
 /**
  * The {@code Response} class produces a model for the JSON formatted response.
+ * <p>
+ * JSON Model:
+ * <p>
+ * {<br>
+ * &emsp;status: 0/-1<br>
+ * &emsp;message: 'message'<br>
+ * &emsp;data: 'data'<br>
+ * }
+ * 
  * 
  * @author Victor A. Lora
  * @version 1.0
- * @see 2017-04-12
+ * @since 2017-04-12
  *
  */
 public class Response

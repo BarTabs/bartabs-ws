@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2017, Ron Gerschel, Jon Goldberg and Victor Lora. All rights reserved.
+ * Ron Gerschel, Jon Goldberg and Victor Lora PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+ *
+ */
 package com.bartabs.ws.authenticate.configuration.model;
 
 import java.util.Calendar;
@@ -41,6 +46,13 @@ public class TokenParams
 		this.subject = subject;
 	}
 
+	/**
+	 * Calculates a day one week in the future from the given {@code Date}
+	 * 
+	 * @param date
+	 *            a start date
+	 * @return a date one week in the future from the start date
+	 */
 	public Date calculateExpiration(Date date)
 	{
 		final Calendar now = Calendar.getInstance();

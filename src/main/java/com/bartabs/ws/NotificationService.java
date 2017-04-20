@@ -49,6 +49,7 @@ public class NotificationService
 	 *            a {@code Notification} instance containing the required
 	 *            information to send a message to the user
 	 * @throws Exception
+	 *             thrown when an error occurs during the notification process
 	 */
 	public void sendNotification(Notification notification) throws Exception
 	{
@@ -58,6 +59,7 @@ public class NotificationService
 			throw new Exception("A notification must be given a body.");
 		}
 
+		// TODO: Abstract the HTTP Post & add a HTTP Get
 		System.setProperty("https.protocols", "SSLv3");
 
 		HttpClient httpclient = HttpClients.createDefault();

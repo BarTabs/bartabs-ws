@@ -72,7 +72,7 @@ public class NameFormatter
 	}
 
 	/**
-	 * Returns a formatted name as <first name> <last name>.
+	 * Returns a formatted name as 'firstName lastName
 	 * 
 	 * @param firstName
 	 *            a first name
@@ -92,7 +92,9 @@ public class NameFormatter
 	 *            a first name
 	 * @param lastName
 	 *            a last name
-	 * @return a formatted name as first name last name (John Doe)
+	 * @param middleInitial
+	 *            a middle initial
+	 * @return a formatted name as firstName MI lastLame (John A Doe)
 	 */
 	public static String format(String firstName, String lastName, String middleInitial)
 	{
