@@ -5,61 +5,59 @@
  */
 package com.bartabs.ws.menu.model;
 
-public class MenuItemIngredient
-{
+public class MenuItemIngredient {
 	private Long objectID;
 	private Long menuItemID;
-	private Long inventoryItemID;
+	private String name;
 	private Integer quantity;
+	private String quantityType;
 	private String comment;
 
-	public Long getObjectID()
-	{
+	public Long getObjectID() {
 		return objectID;
 	}
 
-	public void setObjectID(Long objectID)
-	{
+	public void setObjectID(Long objectID) {
 		this.objectID = objectID;
 	}
 
-	public Long getMenuItemID()
-	{
+	public Long getMenuItemID() {
 		return menuItemID;
 	}
 
-	public void setMenuItemID(Long menuItemID)
-	{
+	public void setMenuItemID(Long menuItemID) {
 		this.menuItemID = menuItemID;
 	}
 
-	public Long getInventoryItemID()
-	{
-		return inventoryItemID;
+	public String getName() {
+		return name;
 	}
 
-	public void setInventoryItemID(Long inventoryItemID)
-	{
-		this.inventoryItemID = inventoryItemID;
+	public void setName(String name) {
+		this.name = name;
 	}
 
-	public Integer getQuantity()
-	{
+	public Integer getQuantity() {
 		return quantity;
 	}
 
-	public void setQuantity(Integer quantity)
-	{
+	public void setQuantity(Integer quantity) {
 		this.quantity = quantity;
 	}
 
-	public String getComment()
-	{
+	public String getQuantityType() {
+		return quantityType;
+	}
+
+	public void setQuantityType(String quantityType) {
+		this.quantityType = quantityType;
+	}
+
+	public String getComment() {
 		return comment;
 	}
 
-	public void setComment(String comment)
-	{
+	public void setComment(String comment) {
 		this.comment = comment;
 	}
 

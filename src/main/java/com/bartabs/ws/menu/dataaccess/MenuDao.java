@@ -10,6 +10,7 @@ import java.util.List;
 import com.bartabs.ws.menu.criteria.MenuCriteria;
 import com.bartabs.ws.menu.model.Menu;
 import com.bartabs.ws.menu.model.MenuItem;
+import com.bartabs.ws.menu.model.MenuItemIngredient;
 
 public interface MenuDao
 {
@@ -43,5 +44,7 @@ public interface MenuDao
 	public void updateMenuItem(MenuItem menuItem);
 
 	public void removeMenuItem(Long menuItemID);
+	
+	public List<MenuItemIngredient> getMenuItemIngredients(Long menuItemID);
 
 }
