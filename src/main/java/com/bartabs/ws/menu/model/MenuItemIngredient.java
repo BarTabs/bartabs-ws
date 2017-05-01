@@ -9,7 +9,7 @@ public class MenuItemIngredient {
 	private Long objectID;
 	private Long menuItemID;
 	private String name;
-	private Integer quantity;
+	private String quantity;
 	private String quantityType;
 	private String comment;
 
@@ -37,11 +37,11 @@ public class MenuItemIngredient {
 		this.name = name;
 	}
 
-	public Integer getQuantity() {
+	public String getQuantity() {
 		return quantity;
 	}
 
-	public void setQuantity(Integer quantity) {
+	public void setQuantity(String quantity) {
 		this.quantity = quantity;
 	}
 

@@ -356,7 +356,7 @@ public class MenuDaoImpl implements MenuDao {
 				row.setObjectID(rs.getLong("objectid"));
 				row.setMenuItemID(menuItemID);
 				row.setName(rs.getString("name"));
-				row.setQuantity(rs.getInt("quantity"));
+				row.setQuantity(rs.getString("quantity"));
 				row.setQuantityType(rs.getString("quantity_type"));
 				row.setComment(rs.getString("comment"));
 
