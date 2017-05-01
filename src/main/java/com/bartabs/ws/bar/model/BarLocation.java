@@ -1,22 +1,21 @@
-package com.bartabs.ws.location.model;
+package com.bartabs.ws.bar.model;
 
-public class Location {
-	private Long objectID;
+public class BarLocation {
+	private Long objectId;
 	private String address1;
 	private String address2;
 	private String city;
 	private String state;
-	private String zipCode;
 	private String latitude;
 	private String longitude;
 	private Integer radius;
 
-	public Long getObjectID() {
-		return objectID;
+	public Long getObjectId() {
+		return objectId;
 	}
 
-	public void setObjectID(Long objectID) {
-		this.objectID = objectID;
+	public void setObjectId(Long objectId) {
+		this.objectId = objectId;
 	}
 
 	public String getAddress1() {
@@ -49,14 +48,6 @@ public class Location {
 
 	public void setState(String state) {
 		this.state = state;
-	}
-
-	public String getZipCode() {
-		return zipCode;
-	}
-
-	public void setZipCode(String zipCode) {
-		this.zipCode = zipCode;
 	}
 
 	public String getLatitude() {

@@ -19,31 +19,27 @@ import com.bartabs.ws.user.model.User;
 import com.bartabs.ws.util.NameFormatter;
 
 @Repository("User.UserDao")
-public class UserDaoImpl implements UserDao
-{
+public class UserDaoImpl implements UserDao {
 	@Autowired
 	NamedParameterJdbcTemplate template;
 
 	@Override
-	public User getUserByID(final Long objectID) throws UserNotFoundException
-	{
+	public User getUserByID(final Long objectID) throws UserNotFoundException {
 		try {
 			// @formatter:off
 			String sql = ""
 				+ "SELECT u.objectid, u.first_name, u.last_name, u.middle_initial, u.phone_number, u.location_id, "
 				+ "		u.user_type, u.username, u.password, l.objectid AS location_id, l.address1, l.address2, "
-				+ "		l.city, l.state, l.zip_code, l.geo_area_id "
+				+ "		l.city, l.state, l.zip "
 				+ "FROM bartabs.user u "
 				+ "LEFT JOIN bartabs.location l ON l.objectid = u.location_id "
 				+ "WHERE u.objectid = :objectID ";
 			// @formatter:on
 
-			return template.queryForObject(sql, new MapSqlParameterSource("objectID", objectID), new RowMapper<User>()
-			{
+			return template.queryForObject(sql, new MapSqlParameterSource("objectID", objectID), new RowMapper<User>() {
 
 				@Override
-				public User mapRow(ResultSet rs, int arg1) throws SQLException
-				{
+				public User mapRow(ResultSet rs, int arg1) throws SQLException {
 					User user = new User();
 					user.setObjectID(rs.getLong("objectid"));
 
@@ -74,8 +70,7 @@ public class UserDaoImpl implements UserDao
 					location.setAddress2(rs.getString("address2"));
 					location.setCity(rs.getString("city"));
 					location.setState(rs.getString("state"));
-					location.setZipCode(rs.getInt("zip_code"));
-					location.setGeoAreaID(rs.getLong("geo_area_id"));
+					location.setZipCode(rs.getString("zip"));
 
 					user.setLocation(location);
 
@@ -89,25 +84,22 @@ public class UserDaoImpl implements UserDao
 	}
 
 	@Override
-	public User getUserByUserName(final String username) throws UserNotFoundException
-	{
+	public User getUserByUserName(final String username) throws UserNotFoundException {
 		try {
 			// @formatter:off
 			String sql = ""
 				+ "SELECT u.objectid, u.first_name, u.last_name, u.middle_initial, u.phone_number, u.location_id, "
 				+ "		u.user_type, u.username, u.password, u.salt, l.objectid AS location_id, l.address1, l.address2, "
-				+ "		l.city, l.state, l.zip_code, l.geo_area_id "
+				+ "		l.city, l.state, l.zip "
 				+ "FROM bartabs.user u "
 				+ "LEFT JOIN bartabs.location l ON l.objectid = u.location_id "
 				+ "WHERE username = :username";
 			// @formatter:on
 
-			return template.queryForObject(sql, new MapSqlParameterSource("username", username), new RowMapper<User>()
-			{
+			return template.queryForObject(sql, new MapSqlParameterSource("username", username), new RowMapper<User>() {
 
 				@Override
-				public User mapRow(ResultSet rs, int arg1) throws SQLException
-				{
+				public User mapRow(ResultSet rs, int arg1) throws SQLException {
 					User user = new User();
 					user.setObjectID(rs.getLong("objectid"));
 
@@ -132,14 +124,14 @@ public class UserDaoImpl implements UserDao
 					user.setUsername(rs.getString("username"));
 					user.setPassword(rs.getString("password"));
 					user.setSalt(rs.getBytes("salt"));
+
 					Location location = new Location();
 					location.setObjectID(rs.getLong("location_id"));
 					location.setAddress1(rs.getString("address1"));
 					location.setAddress2(rs.getString("address2"));
 					location.setCity(rs.getString("city"));
 					location.setState(rs.getString("state"));
-					location.setZipCode(rs.getInt("zip_code"));
-					location.setGeoAreaID(rs.getLong("geo_area_id"));
+					location.setZipCode(rs.getString("zip"));
 
 					user.setLocation(location);
 
@@ -153,8 +145,7 @@ public class UserDaoImpl implements UserDao
 	}
 
 	@Override
-	public Long createUser(final User user) throws DuplicateUserNameException
-	{
+	public Long createUser(final User user) throws DuplicateUserNameException {
 		try {
 			// @formatter:off
 			String sql = "" 
@@ -189,8 +180,7 @@ public class UserDaoImpl implements UserDao
 	}
 
 	@Override
-	public void updateUser(final User user)
-	{
+	public void updateUser(final User user) {
 		// @formatter:off
 		String sql = ""
 			+ "UPDATE bartabs.user "
@@ -215,8 +205,7 @@ public class UserDaoImpl implements UserDao
 	}
 
 	@Override
-	public void removeUser(final User user)
-	{
+	public void removeUser(final User user) {
 		// @formatter:off
 		String sql = ""
 			+ "UPDATE bartabs.user "
@@ -229,8 +218,7 @@ public class UserDaoImpl implements UserDao
 	}
 
 	@Override
-	public void registerForFcmNotifications(final Long userID, final String fcmToken)
-	{
+	public void registerForFcmNotifications(final Long userID, final String fcmToken) {
 		// @formatter:off
 		String sql = ""
 			+ "UPDATE bartabs.user "
@@ -246,8 +234,7 @@ public class UserDaoImpl implements UserDao
 	}
 
 	@Override
-	public String retrieveFcmRegistrationToken(Long userID)
-	{
+	public String retrieveFcmRegistrationToken(Long userID) {
 		// @formatter:off
 		String sql = ""
 			+ "SELECT fcm_token "
@@ -262,8 +249,7 @@ public class UserDaoImpl implements UserDao
 	}
 
 	@Override
-	public String refreshUuid(Long userID)
-	{
+	public String refreshUuid(Long userID) {
 		// @formatter:off
 		String sql = ""
 			+ "UPDATE bartabs.user "
@@ -286,8 +272,7 @@ public class UserDaoImpl implements UserDao
 	}
 
 	@Override
-	public User getUserFromUuid(String uuid)
-	{
+	public User getUserFromUuid(String uuid) {
 		try {
 			// @formatter:off
 			String sql = ""
