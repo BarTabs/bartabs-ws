@@ -62,9 +62,11 @@ public class BarDaoImpl implements BarDao {
 				row.setName(rs.getString("name"));
 				row.setOwnerID(rs.getLong("owner_id"));
 
-				Long locationId = rs.getLong("location_id");
-				Location location = locationService.getLocationByID(locationId);
-				row.setLocation(location);
+				Long locationID = rs.getLong("location_id");
+				if (locationID != null) {
+					Location location = locationService.getLocationByID(locationID);
+					row.setLocation(location);
+				}
 
 				return row;
 			}
@@ -104,7 +106,7 @@ public class BarDaoImpl implements BarDao {
 	}
 
 	@Override
-	public void createBar(Bar bar) {
+	public Long createBar(Bar bar) {
 		// @formatter:off
 		String sql = ""
 				+ "INSERT INTO bartabs.bars "
@@ -120,12 +122,28 @@ public class BarDaoImpl implements BarDao {
 
 		template.update(sql, params);
 
+		final String getIDQuery = "SELECT MAX(objectid) FROM bartabs.bars ";
+
+		return template.queryForObject(getIDQuery, new MapSqlParameterSource(), Long.class);
 	}
 
 	@Override
 	public void updateBar(Bar bar) {
-		// TODO Auto-generated method stub
+		// @formatter:off
+		String sql = ""
+				+ "UPDATE bartabs.bars "
+				+ "SET name = :name, "
+				+ "    location_id = :locationID, "
+				+ "    owner_id = :ownerID, "
+				+ "	   modified_timestamp = now() "
+				+ "WHERE objectid = :objectID";
+		// @formatter:on
 
+		MapSqlParameterSource params = new MapSqlParameterSource();
+		params.addValue("name", bar.getName());
+		params.addValue("locationID", bar.getLocationID());
+		params.addValue("ownerID", bar.getOwnerID());
+		params.addValue("objectID", bar.getObjectID());
 	}
 
 	@Override
@@ -136,8 +154,19 @@ public class BarDaoImpl implements BarDao {
 
 	@Override
 	public void checkIn(Long barID, Long userID) {
-		// TODO Auto-generated method stub
+		// @formatter:off
+		String sql = ""
+				+ "INSERT INTO bartabs.customer "
+				+ "  (user_id, bar_id, checkin_timestamp) "
+				+ "VALUES "
+				+ "  (:userID, :barID, now()";
+		// @formatter:on
 
+		MapSqlParameterSource params = new MapSqlParameterSource();
+		params.addValue("userID", userID);
+		params.addValue("barID", barID);
+
+		template.update(sql, params);
 	}
 
 }

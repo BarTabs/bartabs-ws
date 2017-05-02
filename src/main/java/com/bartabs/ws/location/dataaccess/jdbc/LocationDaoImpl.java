@@ -21,7 +21,7 @@ public class LocationDaoImpl implements LocationDao {
 	public Location getLocationByID(final Long locationID) {
 		// @formatter:off
 		String sql = ""
-			+ "SELECT objectid, address1, address2, city, state, zip_code, latitude, longitude, radius "
+			+ "SELECT objectid, address1, address2, city, state, zip, latitude, longitude, radius "
 			+ "FROM bartabs.location "
 			+ "WHERE objectid = :locationID";
 		// @formatter:on
@@ -40,7 +40,7 @@ public class LocationDaoImpl implements LocationDao {
 						location.setZipCode(rs.getString("zip"));
 						location.setLatitude(rs.getString("latitude"));
 						location.setLongitude(rs.getString("longitude"));
-						location.setRadius(rs.getInt(rs.getInt("radius")));
+						location.setRadius(rs.getDouble("radius"));
 
 						return location;
 					}
@@ -68,7 +68,7 @@ public class LocationDaoImpl implements LocationDao {
 		params.addValue("longitude", location.getLongitude());
 		params.addValue("radius", location.getRadius());
 
-		template.queryForObject(sql, params, Long.class);
+		template.update(sql, params);
 
 		final String getIDQuery = "SELECT MAX(objectid) FROM bartabs.location ";
 

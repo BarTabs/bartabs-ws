@@ -10,7 +10,7 @@ public interface BarDao {
 
 	public Bar getBar(Long objectID);
 
-	public void createBar(Bar bar);
+	public Long createBar(Bar bar);
 
 	public void updateBar(Bar bar);
 

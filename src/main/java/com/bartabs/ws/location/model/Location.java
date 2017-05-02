@@ -9,7 +9,7 @@ public class Location {
 	private String zipCode;
 	private String latitude;
 	private String longitude;
-	private Integer radius;
+	private Double radius;
 
 	public Long getObjectID() {
 		return objectID;
@@ -75,11 +75,11 @@ public class Location {
 		this.longitude = longitude;
 	}
 
-	public Integer getRadius() {
+	public Double getRadius() {
 		return radius;
 	}
 
-	public void setRadius(Integer radius) {
+	public void setRadius(Double radius) {
 		this.radius = radius;
 	}
 
