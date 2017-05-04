@@ -26,7 +26,7 @@ public class BarController extends Response {
 	private BarService service;
 
 	@RequestMapping(value = "/bar/getbars", method = RequestMethod.GET, produces = "application/json")
-	public @ResponseBody Response getOrder(BarCriteria criteria) {
+	public @ResponseBody Response getBars(BarCriteria criteria) {
 
 		try {
 
@@ -51,6 +51,21 @@ public class BarController extends Response {
 		} catch (Exception ex) {
 			log.error(ex.toString(), ex);
 			return buildErrorResponse("Error creating bar");
+		}
+
+	}
+	
+	@RequestMapping(value = "/bar/deletebar", method = RequestMethod.GET, produces = "application/json")
+	public @ResponseBody Response deleteBar(BarCriteria criteria) {
+
+		try {
+
+			service.deleteBar(criteria.getBarID());
+			return buildResponse("Bar successfully removed.");
+
+		} catch (Exception ex) {
+			log.error(ex.toString(), ex);
+			return buildErrorResponse("Error removing bar");
 		}
 
 	}
