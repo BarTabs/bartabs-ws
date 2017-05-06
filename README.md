@@ -5,16 +5,16 @@ by any front end GUI. It leverages the Spring MVC framework and uses Maven for d
 
 **How to get started:**
 
-- On MAC:
-  1. Install Homebrew:
+_On MAC_
+1. Install Homebrew:
     - Launch a terminal window
     - Run `/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"`
-  2. Install Maven: `brew install maven`
-  3. Install [Java 8](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
-  4. Download & Install [Eclipse](http://www.eclipse.org/downloads/)
+2. Install Maven: `brew install maven`
+3. Install [Java 8](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
+4. Download & Install [Eclipse](http://www.eclipse.org/downloads/)
     - Install the [Maven plugin](http://stackoverflow.com/questions/8620127/maven-in-eclipse-step-by-step-installation) for Eclipse
-  5. `git clone` this project as well as the [bartabs-server](https://github.com/BarTabs/bartabs-server)
-  6. Import bartabs-ws and bartabs-server into your Eclipse as Maven projects
+5. `git clone` this project as well as the [bartabs-server](https://github.com/BarTabs/bartabs-server)
+6. Import bartabs-ws and bartabs-server into your Eclipse as Maven projects
   
   
 **How to run on local server:**
