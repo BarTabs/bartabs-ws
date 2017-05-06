@@ -10,15 +10,16 @@ by any front end GUI. It leverages the Spring MVC framework and uses Maven for d
     - Launch a terminal window
     - Run `/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"`
   2. Install Maven: `brew install maven`
-  3. Download & Install [Eclipse](http://www.eclipse.org/downloads/)
+  3. Install [Java 8](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
+  4. Download & Install [Eclipse](http://www.eclipse.org/downloads/)
     - Install the [Maven plugin](http://stackoverflow.com/questions/8620127/maven-in-eclipse-step-by-step-installation) for Eclipse
-  4. `git clone` this project as well as the [bartabs-server](https://github.com/BarTabs/bartabs-server)
-  5. Import bartabs-ws and bartabs-server into your Eclipse as Maven projects
+  5. `git clone` this project as well as the [bartabs-server](https://github.com/BarTabs/bartabs-server)
+  6. Import bartabs-ws and bartabs-server into your Eclipse as Maven projects
   
   
 **How to run on local server:**
 
-1. Install Tomcat8 and [configure](http://crunchify.com/step-by-step-guide-to-setup-and-install-apache-tomcat-server-in-eclipse-development-environment-ide/)
+1. Install [Tomcat8](http://tomcat.apache.org/download-80.cgi#8.5.14) and [configure](http://crunchify.com/step-by-step-guide-to-setup-and-install-apache-tomcat-server-in-eclipse-development-environment-ide/)
 it on Eclipse.
 2. Under the Servers tab, right-click the tomcat server and select `add/remove projects`, then add the **bartabs-server** project
 3. Add your own **server.xml**, **auth0.properties**, and **database.properties** files to map the right configs
